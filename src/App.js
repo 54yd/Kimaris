@@ -24,22 +24,14 @@ const App = () => {
 	const Foundation = css`
 		width:100%;
 		height:100%;
-<<<<<<< HEAD
 		display : grid;
 		/* backgrounded: linear-gradient(#ff4655, #7bcecc); */
 
 		 backgrounded:linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
-=======
-		
-		/*background: linear-gradient(#ff4655, #7bcecc); */
-
-		background:linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
->>>>>>> 168097dbd671fde12bd15424a085b9114882887c
             linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%),
 			linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
 		z-index: 0;	
 
-<<<<<<< HEAD
 	`
 
 	const backgroundedBoard = css`
@@ -55,12 +47,6 @@ const App = () => {
 		margin : 0 0 0 0
 	`
 
-=======
-	`
-	const Header = css`
-	`
-	
->>>>>>> 168097dbd671fde12bd15424a085b9114882887c
 	const MainDesign = css`
 		display: flex;
 		justify-content:center;
@@ -72,20 +58,7 @@ const App = () => {
 	const Container = css`
 		align-items:center;
 		z-index: 2;
-<<<<<<< HEAD
 		
-=======
-	`
-
-	const BackgroundBoard = css`
-		position: absolute;
-		width:100%;
-		height:100%;
-		
-		display: flex;
-		justify-content: center;
-		z-index: 1;
->>>>>>> 168097dbd671fde12bd15424a085b9114882887c
 	`
 
 
@@ -97,17 +70,10 @@ const App = () => {
 	
 	// Sorting Button Implementation
 	// ------------------------------
-<<<<<<< HEAD
 
 	const onclicked = async () => { console.log("clicked") }
 	useEffect(() => { /*console.table(items)*/ })
 
-=======
-
-	const onclicked = async () => { console.log("clicked") }
-	useEffect(() => { /*console.table(items)*/ })
-
->>>>>>> 168097dbd671fde12bd15424a085b9114882887c
 	// List Component (should be split from this file in the future)
 	// ------------------------------
 	const modelPath = 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf';
@@ -143,11 +109,7 @@ const App = () => {
 	}
 
 	const onWrapTouchStart = (e) => {
-<<<<<<< HEAD
 		// fix touch to scroll  backgrounded page on iOS
-=======
-		// fix touch to scroll background page on iOS
->>>>>>> 168097dbd671fde12bd15424a085b9114882887c
 		if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) { return; }
 
 		// fix modal problem in each platform *CAUTION : need to target selector at 2nd argument
@@ -161,7 +123,6 @@ const App = () => {
 	return (
 		
 		<div className={Foundation}>
-<<<<<<< HEAD
 			<div className={backgroundedBoard}>
 				<model-viewer 	src={modelPath} 
 								className={ModelViewerContainer}
@@ -186,10 +147,6 @@ const App = () => {
 							}}>🎍
 					</button>
 				</model-viewer>
-=======
-			<div className={BackgroundBoard}>
-				<model-viewer src={modelPath} alt="3Dmodel" auto-rotate camera-controls></model-viewer>
->>>>>>> 168097dbd671fde12bd15424a085b9114882887c
 			</div>
 			<div className={MainDesign}>
 				
