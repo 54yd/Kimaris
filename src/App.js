@@ -24,18 +24,29 @@ const App = () => {
 	const Foundation = css`
 		width:100%;
 		height:100%;
-		
-		/*background: linear-gradient(#ff4655, #7bcecc); */
+		display : grid;
+		/* backgrounded: linear-gradient(#ff4655, #7bcecc); */
 
-		background:linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
+		 backgrounded:linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
             linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%),
 			linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
 		z-index: 0;	
 
 	`
-	const Header = css`
+
+	const backgroundedBoard = css`
+		width:100%;
+		height:500px;
+		margin : 0 0 0 0
+		grid-template-columns: 1fr
+		z-index: 1;
+	`	
+	const ModelViewerContainer = css`
+		width:500px;
+		height:500px;
+		margin : 0 0 0 0
 	`
-	
+
 	const MainDesign = css`
 		display: flex;
 		justify-content:center;
@@ -47,17 +58,9 @@ const App = () => {
 	const Container = css`
 		align-items:center;
 		z-index: 2;
+		
 	`
 
-	const BackgroundBoard = css`
-		position: absolute;
-		width:100%;
-		height:100%;
-		
-		display: flex;
-		justify-content: center;
-		z-index: 1;
-	`
 
 	const [items, setItems] = useState([])
 	const [sortedItems, setSortedItems] = useState([])
@@ -106,7 +109,7 @@ const App = () => {
 	}
 
 	const onWrapTouchStart = (e) => {
-		// fix touch to scroll background page on iOS
+		// fix touch to scroll  backgrounded page on iOS
 		if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) { return; }
 
 		// fix modal problem in each platform *CAUTION : need to target selector at 2nd argument
@@ -120,8 +123,30 @@ const App = () => {
 	return (
 		
 		<div className={Foundation}>
-			<div className={BackgroundBoard}>
-				<model-viewer src={modelPath} alt="3Dmodel" auto-rotate camera-controls></model-viewer>
+			<div className={backgroundedBoard}>
+				<model-viewer 	src={modelPath} 
+								className={ModelViewerContainer}
+								alt="3Dmodel" 
+								auto-rotate 
+								camera-controls 
+								shadow-intensity="1" 
+								ar 
+								ar-scale="auto" >
+					<button slot="ar-button" 
+							style={{
+								fontFamily:"Helvetica",
+								background:"white", 
+								borderRadius: "4px", 
+								border: "none", 
+								position: "absolute", 
+								fontSize:"20px",
+								top: "16px", 
+								right: "16px",
+								padding: "8px",
+								textAlign: "center",
+							}}>🎍
+					</button>
+				</model-viewer>
 			</div>
 			<div className={MainDesign}>
 				
