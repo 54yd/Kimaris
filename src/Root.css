@@ -3,3 +3,9 @@
 
 /*Google Font imported here*/
 @import "https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap"
+
+model-viewer {
+    width:500px;
+    height:500px;
+    margin : 0 0 0 0
+}
