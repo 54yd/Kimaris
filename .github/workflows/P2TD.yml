@@ -1,0 +1,25 @@
+# This is a basic workflow to help you get started with Actions
+
+name: P2TD
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ main ]
+
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Push directory to another repository
+      uses: cpina/github-action-push-to-another-repository@v1.2
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB_ACTIONS_P2AR }}
+        with:
+          source-directory: 'build'
+          destination-github-username: 'TearsDrifted'
+          destination-repository-name: 'tearsdrifted.github.io'
+          user-email: straydrop411@gmail.com
+          target-branch: 'develop'
