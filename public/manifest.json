@@ -1,6 +1,7 @@
 {
-  "short_name": "Your Orders",
-  "name": "Your Orders",
+  "short_name": "年賀状",
+  "description": "everything become reality, the future is yours.",
+  "name": "Drop Orders",
   "icons": [
     {
       "src": "favicon.ico",
@@ -10,6 +11,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#b088f9",
+  "background_color": "#00bfff"
 }

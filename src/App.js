@@ -11,6 +11,7 @@ import * as ModelViewer from "@google/model-viewer"
 //Utils
 import useScrollPosition from './useScrollPosition'
 import { RotateGradient } from './RotateGradient'
+import { AddHomeButton } from './AddHomeButton'
 
 //Components
 import "./Root.css"
@@ -25,7 +26,8 @@ import {
 	WhiteSpace,
 	Modal,
 	Icon,
-	NoticeBar
+	NoticeBar,
+	Progress
   } from "antd-mobile"
 
   import { Modal as BSModal } from 'react-bootstrap/Modal';
@@ -39,6 +41,10 @@ import { ReactComponent as SymbolSoundOn } from "./assets/svgs/circumference_fil
 import OldTown from "./JapaneseCityExample.gif"
 import KanagawaTown from "./KanagawaExample.gif"
 
+//GLTF, GLB
+import modelDuck from './Duck.glb'
+
+
 import { Parallax, ParallaxLayer } from 'react-spring/renderprops-addons'
 
 //Sounds
@@ -50,10 +56,15 @@ import BGMdv2 from './The Division 2  Theme Music.mp3';
 import SFXget2 from './Cash register 2.mp3'
 import SFXduck7 from "./duck_2_quack_07.mp3"
 import SFXduck8 from "./duck_2_quack_08.mp3"
+import SFXduckS2 from "./duck_2_quack_seq_02.mp3"
+import SFXduckS5 from "./duck_2_quack_seq_05.mp3"
 import SFXclick8 from "./Click back sounds 8.mp3"
 // *** App ***  
 
 const App = () => {
+
+
+	// if touchcount==10 hp-=10 touchcount=0
 
 	// Device Size Checker Implementation
 	// ------------------------------
@@ -63,6 +74,9 @@ const App = () => {
 
 	// Sound Implementation
 	// ------------------------------
+	const [cntTouchDuck, setCntTouchDuck] = useState(0)
+	const [HPDuck, setHPDuck] = useState(100)
+
 
 	const [items, setItems] = useState([])
 	const [sortedItems, setSortedItems] = useState([])
@@ -84,6 +98,38 @@ const App = () => {
 	const [playSFXclick8, {stop : stopSFXclick8} ] = useSound(SFXclick8)
 	const [playSFXduck7, {stop : stopSFXduck7} ] = useSound(SFXduck7)
 	const [playSFXduck8, {stop : stopSFXduck8} ] = useSound(SFXduck8)
+	const [playSFXduckS2, {stop : stopSFXduckS2} ] = useSound(SFXduckS2)
+	const [playSFXduckS5, {stop : stopSFXduckS5} ] = useSound(SFXduckS5)
+
+
+
+	const mesDuckBattle = [
+		{
+			mes:"げんき！げんき！",
+			snd:playSFXduckS5
+		},
+		{
+			mes:"え、なあに？",
+			snd:playSFXduckS2
+		},
+		{
+			mes:"えっ、いたいよっ！！",
+			snd:playSFXduckS5
+		},
+		{
+			mes:"や…………　　め　……て……！！！",
+			snd:playSFXduck8
+		},
+		{
+			mes:"いたい………どう…して…",
+			snd:playSFXduckS5
+		},
+		{
+			mes:"返事がない。(事切れている…。)",
+			snd:playSFXclick8
+		}
+	]
+
 
 	const toggleBGM = () => {
 		console.log(isBGMPlaying)		
@@ -132,7 +178,9 @@ const App = () => {
 
 		if (window.innerWidth > 800) setIsOverWidth(true);
 
+
 	},[])
+
 
 	// *** SFX
 	
@@ -264,13 +312,29 @@ const App = () => {
 		backdrop-filter: blur(10px);
 	`
 
+	const ButtonFillAnimation = css`
+		content: "";
+		display: block;
+		position: absolute;
+		height: 100%;
+		width: 120%;
+		top: 0;
+		left: -5%;
+		background: #00bfff;
+		transform: translateX(-100%) skew(-10deg);
+		transition: -webkit-transform 0.3s ease-out;
+		transition: transform 0.3s ease-out;
+		
+		&:hover {
+			transform: translateX(0) skew(-10deg);
+		}
+  }
+	`
+
 	const onclicked = async () => { 
 		console.log("clicked") 	
  	}
 
-	// List Component (should be split from this file in the future)
-	// ------------------------------
-	const modelPath = 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf';
 
 	// Modal
 	// ------------------------------
@@ -286,6 +350,7 @@ const App = () => {
 		return null;
 	}
 
+	//modal state
 	const [ stateModalAudioAgreement,setStateModalAudioAgreement ] = useState(
 		{
 			modal1: false,
@@ -386,17 +451,20 @@ const App = () => {
 		} 
 	}
 
+
+
 	// Component
 	// ------------------------------
 	return (
 
 		<div className={RootDesign}>
+		<AddHomeButton/>
 
 			<div className={backgroundParallax}>
 				
 				{/* *** Background 3D   */}
 				<div className={backgroundModelBoard}>
-					<model-viewer 	src={modelPath} 
+					<model-viewer 	src={modelDuck} 
 									alt="年賀状" 
 									auto-rotate 
 									disable-zoom
@@ -435,10 +503,11 @@ const App = () => {
 			{ isOverWidth ||
 			<NoticeBar 	mode="closable" 
 						marqueeProps= {{ loop: true, leading: 1000, trailing: 18000, style: { padding: '0 7.5px', fontFamily:"Helvetica" }} }
-						style={{marginTop: 16+3+"px", marginLeft:15+5+"px", marginRight:40+15+"px"}}>このWebアプリでは、色々な物が隠されています。さわって捜査してみましょう。音が流れます、音量を上げてお楽しみください。</NoticeBar>
+						style={{marginTop: 16+3+"px", marginLeft:15+5+"px", marginRight:40+15+"px"}}>この年賀状アプリには、「ある謎」が隠されています。探索をし、様々なモノに触れてみましょう。この謎を解くには、「音」を聞く必要があります。</NoticeBar>
 			}
 
 			<button
+				id="BGMSwitcher"
 				style={{
 					background: "transparent",
 					border: "0px",
@@ -497,32 +566,60 @@ const App = () => {
 					{/* *** Articles   */}
 					<div className={ArticleRootDesign}>
 					
-						<div className={FirstViewWhiteSpace} onClick={playSFXduck7}></div>
+						<div 
+							className={FirstViewWhiteSpace} 
+							onClick={ async (e)=>{
+								if(HPDuck>0){ await setHPDuck(HPDuck-5);} 
+								if(parseFloat(HPDuck-5)%20.0===0.0){ showModal("modal1")(e)}; 
+								playSFXduck7(); 
+								await console.log("HPD:"+HPDuck);
+ 							}}>
+						</div>
 						<div className={ArticleContainer}>
 							<h1 style={{ color:"#0f1923" }}>HAPPY NEW YEAR 2021</h1>
 							<WhiteSpace lg/>
 							<WhiteSpace lg/>
 							<WhiteSpace lg/>
-							<Button onMouseEnter={playBGMOcn1} onMouseLeave={stopBGMOcn1} onClick={onclicked} style={{zIndex:"100", borderRadius:"30px"}}>Hello World</Button>
+							<Button
+								onClick={ ()=>{window.document.querySelector("#BGMSwitcher").click(); return;} } 
+								style={{zIndex:"100", borderRadius:"30px", background:"rgba(255,255,255,0.3)"}}>|  || ||||| ||| ||| ||| ||||     ||
+							</Button>
 							<WhiteSpace lg/>
 							<WingBlank>
-							<Button onMouseEnter={playBGMOcn1} onMouseLeave={stopBGMOcn1} onClick={showModal("modal1")} style={{zIndex:"100", borderRadius:"30px"}}>MODAL</Button>
-
-								<WhiteSpace />
+							<WhiteSpace />
 								<Modal
-								visible={stateModalAudioAgreement.modal1}
-								transparent
-								maskClosable={false}
-								onClose={onClose('modal1')}
-								title="Title"
-								footer={[{ text: 'OK', onPress: () => { console.log('OK'); onClose('modal1')(); } }]}
-								wrapProps={{ onTouchStart: onWrapTouchStart }}
-								afterClose={() => { alert('afterClose'); }}
+									visible={stateModalAudioAgreement.modal1}
+									transparent
+									maskClosable={false}
+									onClose={onClose('modal1')}
+									title="アヒル : HP"
+									footer={[{ text: '×', onPress: () => { console.log('modal closed'); onClose('modal1')(); } }]}
+									wrapProps={{ onTouchStart: onWrapTouchStart }}
+									afterClose={() => { mesDuckBattle[(5-parseInt(HPDuck/20))].snd(); alert( mesDuckBattle[(5-parseInt(HPDuck/20))].mes ); }}
 								>
-									<div style={{ height: 100, overflow: 'scroll' }}>
-										scroll content...<br />
+									<div style={{ height: "100px", overflow: 'scroll' }}>
+										<br />
+										<Progress percent={HPDuck} position="normal" unfilled={true} barStyle={{borderRadius:"5px"}} style={{}} appearTransition/>
+										{HPDuck}/100
 									</div>
 								</Modal>
+
+							<Button onClick={ showModal("modal2")} style={{zIndex:"100", borderRadius:"30px"}}>MODAL</Button>
+							<Modal
+									visible={stateModalAudioAgreement.modal2}
+									transparent
+									maskClosable={false}
+									onClose={onClose('modal2')}
+									title="LOG FILE"
+									footer={[{ text: '×', onPress: () => { console.log('modal 2 closed'); onClose('modal2')(); } }]}
+									wrapProps={{ onTouchStart: onWrapTouchStart }}
+									afterClose={() => {}}
+								>
+									<div style={{ height: "100px", overflow: 'scroll' }}>
+										MODAL 2<br />
+									</div>
+								</Modal>
+
 							</WingBlank>
 						
 						</div>
@@ -533,7 +630,7 @@ const App = () => {
 
 				<ParallaxLayer offset={1.3} speed={-0.3} style={{ pointerEvents: 'none' }}>
 					<img src={url('satellite4')} style={{ width: '15%', marginLeft: '70%' }} />
-					<Card style={{margin:"auto", bottom:"-10px", maxWidth:"100px", display:"flex" , justifyContent:"center", textAlign:"center", fontFamily:"Noto Sans JP", padding:"10px 10px"}}>秀知院学園周知の事実</Card>
+					<Card style={{margin:"auto", bottom:"-10px", maxWidth:"280px", maxHeight:"30px",display:"flex" , justifyContent:"center", textAlign:"center", fontFamily:"Noto Sans JP", padding:"10px 10px"}}>秀知院学園周知の事実</Card>
 					<img src={OldTown} />
 
 				</ParallaxLayer>
