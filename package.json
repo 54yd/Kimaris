@@ -20,6 +20,7 @@
     "bootstrap": "^4.5.3",
     "dotenv": "^8.2.0",
     "emotion": "10.0.27",
+    "gl-react": "^4.1.0",
     "gl-react-dom": "^5.0.0",
     "hoist-non-react-statics": "^3.3.2",
     "lerp": "^1.0.3",
