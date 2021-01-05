@@ -32,7 +32,7 @@ import {
 
   import { Modal as BSModal } from 'react-bootstrap/Modal';
 
-  import { useSpring, animated } from 'react-spring'
+  import { useSpring, animated as a } from 'react-spring'
 
 //Textures,SVGs
 import { ReactComponent as SymbolSoundOff } from "./assets/svgs/circumference.svg"
@@ -45,7 +45,7 @@ import KanagawaTown from "./KanagawaExample.gif"
 import modelDuck from './Duck.glb'
 
 import Mglb from 'Duck.glb'
-import Musdz from 'Duck.usdz'
+import Musdz from 'toy_biplane.usdz'
 
 
 
@@ -456,17 +456,7 @@ const App = () => {
 		} 
 	}
 
-
-	const __props = useSpring({
-		to: async (next, cancel) => {
-		  await next({opacity: 1, color: '#ffaaee'})
-		  await next({opacity: 0, color: 'rgb(14,26,19)'})
-		},
-		from: {opacity: 0, color: 'red'}
-	})
-
-	// Update spring with new props
-	//setFade({opacity: toggle ? 1 : 0})
+	  
 
 	// Component
 	// ------------------------------
@@ -597,12 +587,11 @@ const App = () => {
 							<WhiteSpace lg/>
 							<WhiteSpace lg/>
 							<WhiteSpace lg/>
-							<Button>
-								onClick={ ()=>{window.document.querySelector("#BGMSwitcher").click(); setFlipped(state => !state); return;} } 
-								style={{zIndex:"100", borderRadius:"30px", border:"1px solid #ffffff", boxSizing:"border-box", background:"rgba(255,255,255,0.3)", display:"flex", justifyContent:"center", alignItems:"center"}}>
-								|  || ||||| ||| ||| ||| ||||     ||
-							</Button>
 							
+							<Button
+								onClick={ ()=>{window.document.querySelector("#BGMSwitcher").click(); return;} } 
+								style={{zIndex:"100", borderRadius:"30px", border:"1px solid #ffffff", boxSizing:"border-box", background:"rgba(255,255,255,0.3)", display:"flex", justifyContent:"center", alignItems:"center"}}>|  || ||||| ||| ||| ||| ||||     ||
+							</Button>
 							<WhiteSpace lg/>
 							<WingBlank>
 							<WhiteSpace />
