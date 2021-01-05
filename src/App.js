@@ -457,6 +457,26 @@ const App = () => {
 	}
 
 
+	const ModelViewer = ({ glb, usdz }) => {
+	  
+		const srcURL = new URL(glb, document.baseURI).href
+		console.log(srcURL)
+		return (
+		  <model-viewer 
+						src={srcURL}
+		  				ios-src={usdz}
+		  				alt="年賀状" 
+						auto-rotate 
+						disable-zoom
+						camera-orbit="45deg 55deg 2.5m"
+						shadow-intensity="1" 
+						ar 
+						{...arOptionProps}
+						ar-modes="webxr scene-viewer quick-look"
+						ar-scale="auto" />
+		)
+	}
+	  
 
 	// Component
 	// ------------------------------
@@ -469,19 +489,9 @@ const App = () => {
 				
 				{/* *** Background 3D   */}
 				<div className={backgroundModelBoard}>
-					<model-viewer 
-									src={Mglb} 
-									ios-src={Musdz}
-									ios-src="./toy_biplane.usdz"
-									alt="年賀状" 
-									auto-rotate 
-									disable-zoom
-									camera-orbit="45deg 55deg 2.5m"
-									shadow-intensity="1" 
-									ar 
-									{...arOptionProps}
-									ar-modes="webxr scene-viewer quick-look"
-									ar-scale="auto" >
+					<ModelViewer 
+									glb={Mglb} 
+									usdz={Musdz}>
 						{(isMobileOrTablet) &&
 							<button slot="ar-button" 
 								id="ar-button-1"
@@ -501,7 +511,7 @@ const App = () => {
 								}}>🎍
 							</button>
 						}
-					</model-viewer>
+					</ModelViewer>
 				</div>
 
 
