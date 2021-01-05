@@ -45,7 +45,7 @@ import KanagawaTown from "./KanagawaExample.gif"
 import modelDuck from './Duck.glb'
 
 import Mglb from 'Duck.glb'
-import Musdz from 'toy_biplane.usdz'
+import Musdz from 'Duck.usdz'
 
 
 
