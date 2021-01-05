@@ -10,12 +10,14 @@ on:
 
 
 jobs:
-  greeting:
+  build:
     runs-on: ubuntu-latest
+    container: pandoc/latex
     steps:
-    - name: Push directory to another repository
-      uses: cpina/github-action-push-to-another-repository@v1.2
-        env:
+      - name: Pushes to another repository
+        id: push_directory
+        uses: cpina/github-action-push-to-another-repository@master
+        env: 
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB_ACTIONS_P2AR }}
         with:
           source-directory: 'build'
