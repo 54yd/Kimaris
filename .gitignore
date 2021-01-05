@@ -115,8 +115,9 @@ dist
 # testing
 /coverage
 
+#[WARNING] Temporary on for git push bacause of CI that push at develop and export to another build-file-only repo 
 # production
-/build
+# /build
 
 # IDEs and editors
 /.idea
