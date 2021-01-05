@@ -1,6 +1,6 @@
 //Core
 import React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect,useRef } from 'react'
 import { css } from 'emotion'
 
 //Addons
@@ -43,6 +43,10 @@ import KanagawaTown from "./KanagawaExample.gif"
 
 //GLTF, GLB
 import modelDuck from './Duck.glb'
+
+import Mglb from 'Duck.glb'
+import Musdz from 'toy_biplane.usdz'
+
 
 
 import { Parallax, ParallaxLayer } from 'react-spring/renderprops-addons'
@@ -180,6 +184,7 @@ const App = () => {
 
 
 	},[])
+
 
 
 	// *** SFX
@@ -464,7 +469,10 @@ const App = () => {
 				
 				{/* *** Background 3D   */}
 				<div className={backgroundModelBoard}>
-					<model-viewer 	src={modelDuck} 
+					<model-viewer 
+									src={Mglb} 
+									ios-src={Musdz}
+									ios-src="./toy_biplane.usdz"
 									alt="年賀状" 
 									auto-rotate 
 									disable-zoom
@@ -473,7 +481,6 @@ const App = () => {
 									ar 
 									{...arOptionProps}
 									ar-modes="webxr scene-viewer quick-look"
-									ios-src="./toy_biplane.usdz"
 									ar-scale="auto" >
 						{(isMobileOrTablet) &&
 							<button slot="ar-button" 
