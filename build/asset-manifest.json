@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.f839f115.chunk.css",
-    "main.js": "/static/js/main.13f167d7.chunk.js",
+    "main.js": "/static/js/main.a5ecfc7c.chunk.js",
     "runtime-main.js": "/static/js/runtime-main.dab42f43.js",
     "static/css/2.a547b4c4.chunk.css": "/static/css/2.a547b4c4.chunk.css",
     "static/js/2.757a7c38.chunk.js": "/static/js/2.757a7c38.chunk.js",
@@ -15,6 +15,7 @@
     "static/media/Cash register 2.0ec3651d.mp3": "/static/media/Cash register 2.0ec3651d.mp3",
     "static/media/Click back sounds 8.331a56eb.mp3": "/static/media/Click back sounds 8.331a56eb.mp3",
     "static/media/Duck.5ae1ad5d.glb": "/static/media/Duck.5ae1ad5d.glb",
+    "static/media/Duck.d37da825.usdz": "/static/media/Duck.d37da825.usdz",
     "static/media/Galimatias  Joppe  Mintaka.a19ea23a.mp3": "/static/media/Galimatias  Joppe  Mintaka.a19ea23a.mp3",
     "static/media/JapaneseCityExample.cc8b8ff2.gif": "/static/media/JapaneseCityExample.cc8b8ff2.gif",
     "static/media/KanagawaExample.764441a2.gif": "/static/media/KanagawaExample.764441a2.gif",
@@ -27,14 +28,13 @@
     "static/media/duck_2_quack_08.4afc5653.mp3": "/static/media/duck_2_quack_08.4afc5653.mp3",
     "static/media/duck_2_quack_seq_02.bfe6f6b2.mp3": "/static/media/duck_2_quack_seq_02.bfe6f6b2.mp3",
     "static/media/duck_2_quack_seq_05.ed5dd1fb.mp3": "/static/media/duck_2_quack_seq_05.ed5dd1fb.mp3",
-    "static/media/ping.a0246f13.mp3": "/static/media/ping.a0246f13.mp3",
-    "static/media/toy_biplane.e288c8ff.usdz": "/static/media/toy_biplane.e288c8ff.usdz"
+    "static/media/ping.a0246f13.mp3": "/static/media/ping.a0246f13.mp3"
   },
   "entrypoints": [
     "static/js/runtime-main.dab42f43.js",
     "static/css/2.a547b4c4.chunk.css",
     "static/js/2.757a7c38.chunk.js",
     "static/css/main.f839f115.chunk.css",
-    "static/js/main.13f167d7.chunk.js"
+    "static/js/main.a5ecfc7c.chunk.js"
   ]
 }
