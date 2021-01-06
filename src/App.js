@@ -5,7 +5,7 @@ import { css } from 'emotion'
 
 //Addons
 import * as R from 'ramda'
-import * as ModelViewer from "@google/model-viewer"
+import "@google/model-viewer"
 
 
 //Utils
@@ -469,7 +469,7 @@ const App = () => {
 				
 				{/* *** Background 3D   */}
 				<div className={backgroundModelBoard}>
-						<model-viewer 
+						<model-viewer
 						src="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Binary/Duck.glb"
 		  				ios-src={Musdz}
 		  				alt="年賀状" 
