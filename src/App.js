@@ -1,11 +1,12 @@
 //Core
 import React from 'react'
-import { useState, useEffect,useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { css } from 'emotion'
 
 //Addons
 import * as R from 'ramda'
-import "@google/model-viewer"
+import Helmet from 'react-helmet'
+//import "@google/model-viewer"
 
 
 //Utils
@@ -464,6 +465,17 @@ const App = () => {
 
 		<div className={RootDesign}>
 		<AddHomeButton/>
+
+			<Helmet>
+				<script
+					type="module"
+					src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"
+				/>
+				<script
+					noModule
+					src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"
+				/>				
+			</Helmet>
 
 			<div className={backgroundParallax}>
 				
