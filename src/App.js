@@ -470,7 +470,7 @@ const App = () => {
 				{/* *** Background 3D   */}
 				<div className={backgroundModelBoard}>
 						<model-viewer 
-						src="https://kimaris.vercel.app/static/media/Duck.5ae1ad5d.glb"
+						src="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Binary/Duck.glb"
 		  				ios-src={Musdz}
 		  				alt="年賀状" 
 						auto-rotate 
