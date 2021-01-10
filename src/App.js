@@ -8,7 +8,6 @@ import * as R from 'ramda'
 import Helmet from 'react-helmet'
 //import "@google/model-viewer"
 
-
 //Utils
 import useScrollPosition from './useScrollPosition'
 import { RotateGradient } from './RotateGradient'
@@ -30,10 +29,9 @@ import {
 	NoticeBar,
 	Progress
   } from "antd-mobile"
+import { Modal as BSModal } from 'react-bootstrap/Modal';
 
-  import { Modal as BSModal } from 'react-bootstrap/Modal';
-
-  import { useSpring, animated as a } from 'react-spring'
+import { useSpring, animated as a } from 'react-spring'
 
 //Textures,SVGs
 import { ReactComponent as SymbolSoundOff } from "./assets/svgs/circumference.svg"
@@ -45,8 +43,12 @@ import KanagawaTown from "./KanagawaExample.gif"
 //GLTF, GLB
 import modelDuck from './Duck.glb'
 
-import Mglb from 'Duck.glb'
-import Musdz from 'Duck.usdz'
+import DuckGLB from 'Duck.glb'
+import DuckUSDZ from 'Duck.usdz'
+import FoxGLB from 'Fox.glb'
+import FoxUSDZ from 'Fox.usdz'
+import ToycarGLB from 'Toycar.glb'
+import ToycarUSDZ from 'Toycar.usdz'
 
 
 
@@ -106,7 +108,7 @@ const App = () => {
 	const [playSFXduckS2, {stop : stopSFXduckS2} ] = useSound(SFXduckS2)
 	const [playSFXduckS5, {stop : stopSFXduckS5} ] = useSound(SFXduckS5)
 
-
+	const [currStage, setCurrStage] = useState(0);
 
 	const mesDuckBattle = [
 		{
@@ -114,19 +116,23 @@ const App = () => {
 			snd:playSFXduckS5
 		},
 		{
-			mes:"え、なあに？",
+			mes:"え？ いたい………",
 			snd:playSFXduckS2
 		},
 		{
-			mes:"えっ、いたいよっ！！",
+			mes:"やめてよっ！！",
 			snd:playSFXduckS5
 		},
 		{
-			mes:"や…………　　め　……て……！！！",
+			mes:"ゆる…………　　さ　……ない……！！！",
 			snd:playSFXduck8
 		},
 		{
-			mes:"いたい………どう…して…",
+			mes:"…… ……！！！",
+			snd:playSFXduckS5
+		},
+		{
+			mes:"(なぜか攻撃が通用しない…。) (街で武器を探すべきかもしれない。)",
 			snd:playSFXduckS5
 		},
 		{
@@ -186,6 +192,17 @@ const App = () => {
 
 	},[])
 
+
+	useEffect(
+		()=>{
+			if (HPDuck ==90) {
+				const HPModal = window.document.querySelector("#HPModal")
+				const _event = new CustomEvent("ModalOpen",{bubbles:true})
+
+				HPModal.addEventListener("ModalOpen", e=>{ showModal("modal1")(e) })
+				HPModal.dispatchEvent(_event) // the argue must be Event Type Callback , not Event Type Name
+			}
+	},[HPDuck])
 
 
 	// *** SFX
@@ -313,6 +330,21 @@ const App = () => {
 		animation-iteration-count:infinite;
 		animation-timing-function:ease-in-out;
 	`
+
+	const BackStyleSymbolSound = css`
+		height:100%;
+		width:100%;
+		opacity:20%;
+		@keyframes rotation {
+			0% {transform: rotate(0deg); opacity: 20%;}
+			50% {transform: rotate(360deg); opacity: 10%;}
+			100% {transform: rotate(720deg); opacity: 20%;}
+		}
+		animation-name:rotation;
+		animation-duration:5s;
+		animation-iteration-count:infinite;
+		animation-timing-function:ease-in-out;
+	`	
 	
 	const backdropFilter1 = css`
 		backdrop-filter: blur(10px);
@@ -434,6 +466,44 @@ const App = () => {
 		)
 	}
 
+
+	const stageParams = [
+		{
+			"src": DuckGLB,
+			"ios-src":DuckUSDZ,
+			"camera-orbit":"45deg 55deg 2.5m",
+			"min-camera-orbit":'auto auto auto'
+		},
+		{
+			"src": FoxGLB,
+			"ios-src":FoxUSDZ,
+			"camera-orbit":'5.14rad 1.03rad 200m',
+			"min-camera-orbit":'auto auto 2m'
+
+		},
+
+		{
+			"src": ToycarGLB,
+			"ios-src":ToycarUSDZ,
+			"camera-orbit":"45deg 55deg 2.5m",
+			"min-camera-orbit":'auto auto auto'
+		},
+	]
+
+	const yearParams = [ "17","18","19","20","21" ]
+
+	
+
+
+	const [stateFadeMusicButton, toggleFadeMusicButton] = useState(true)
+	const { fadeMusicButtonX } = useSpring({ 
+		from: { fadeMusicButtonX: 0 }, 
+		fadeMusicButtonX: stateFadeMusicButton ? 1 : 0, 
+		config: { duration: 400 } 
+	})
+
+	//console.log(stageParams[currStage])
+	//console.log(yearParams[currStage])
 	// Parallax
 	// ------------------------------
 
@@ -464,7 +534,6 @@ const App = () => {
 	return (
 
 		<div className={RootDesign}>
-		<AddHomeButton/>
 
 			<Helmet>
 				<script
@@ -478,12 +547,29 @@ const App = () => {
 			</Helmet>
 
 			<div className={backgroundParallax}>
-				
+
+						<div style={{
+							position: "absolute",
+							height:screenSize.height,
+							width:screenSize.width*1,
+							overflow: "hidden",
+						}}>
+							<div style={{
+									marginLeft:"-50%",
+									transform: "translateX(16.5%)",
+									marginTop:screenSize.height/(3+3)+"px",
+									display: "flex" , justifyContent:"center",alignItems:"center",
+
+							}}>
+								<SymbolSoundOff className={BackStyleSymbolSound} style={{
+									zIndex:"10",		
+									}}/>
+							</div>				
+						</div>
 				{/* *** Background 3D   */}
 				<div className={backgroundModelBoard}>
+
 						<model-viewer
-						src="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Binary/Duck.glb"
-		  				ios-src={Musdz}
 		  				alt="年賀状" 
 						auto-rotate 
 						disable-zoom
@@ -493,6 +579,10 @@ const App = () => {
 						{...arOptionProps}
 						ar-modes="webxr scene-viewer quick-look"
 						ar-scale="auto"
+						rotation-per-second="50deg"
+						autoplay
+						{...stageParams[currStage]}
+
 						>
 						{(isMobileOrTablet) &&
 							<button slot="ar-button" 
@@ -521,8 +611,8 @@ const App = () => {
 
 			{ isOverWidth ||
 			<NoticeBar 	mode="closable" 
-						marqueeProps= {{ loop: true, leading: 1000, trailing: 18000, style: { padding: '0 7.5px', fontFamily:"Helvetica" }} }
-						style={{marginTop: 16+3+"px", marginLeft:15+5+"px", marginRight:40+15+"px"}}>この年賀状アプリには、「ある謎」が隠されています。探索をし、様々なモノに触れてみましょう。この謎を解くには、「音」を聞く必要があります。</NoticeBar>
+						marqueeProps= {{ loop: true, leading: 1000, trailing: 5000, style: { padding: '0 7.5px', fontFamily:"Helvetica" }} }
+						style={{marginTop: 16+3+"px", marginLeft:15+5+"px", marginRight:40+15+"px"}}>このアプリは、「丑年」のはずが、「とある事件」により、何故か別の生物に支配されてしまいました。探索をして、様々なモノに触れ、事件の謎を解いてみましょう。謎を解くには「音」を聞く必要があります。</NoticeBar>
 			}
 
 			<button
@@ -586,24 +676,40 @@ const App = () => {
 					<div className={ArticleRootDesign}>
 					
 						<div 
+							id="HPModal"
 							className={FirstViewWhiteSpace} 
 							onClick={ async (e)=>{
 								if(HPDuck>0){ await setHPDuck(HPDuck-5);} 
-								if(parseFloat(HPDuck-5)%20.0===0.0){ showModal("modal1")(e)}; 
+								//if(parseFloat(HPDuck-5)%20.0===0.0){ showModal("modal1")(e)}; 
 								playSFXduck7(); 
+								if(HPDuck==0) { if (currStage<2) { setCurrStage((currStage=>(currStage+1))); setHPDuck(100); } }
 								await console.log("HPD:"+HPDuck);
  							}}>
 						</div>
 						<div className={ArticleContainer}>
-							<h1 style={{ color:"#0f1923" }}>HAPPY NEW YEAR 2021</h1>
+						<h1 style={{ color:"#0f1923" }}>HAPPY NEW YEAR 20{yearParams[currStage]}</h1>
 							<WhiteSpace lg/>
 							<WhiteSpace lg/>
 							<WhiteSpace lg/>
-							
+							<a.div
+							style={{
+							opacity: fadeMusicButtonX.interpolate({ range: [0, 1], output: [0.05, 1] }),
+							transform: fadeMusicButtonX
+								.interpolate({
+								range: [0, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 1],
+								output: [1, 0.97, 0.9, 1.1, 0.9, 1.1, 1.03, 1]
+								})
+								.interpolate((_x) => `scale(${_x})`)
+							}}>
 							<Button
-								onClick={ ()=>{window.document.querySelector("#BGMSwitcher").click(); return;} } 
-								style={{zIndex:"100", borderRadius:"30px", border:"1px solid #ffffff", boxSizing:"border-box", background:"rgba(255,255,255,0.3)", display:"flex", justifyContent:"center", alignItems:"center"}}>|  || ||||| ||| ||| ||| ||||     ||
+								onClick={ ()=>{window.document.querySelector("#BGMSwitcher").click(); toggleFadeMusicButton(!stateFadeMusicButton); return;} } 
+								style={{
+									zIndex:"100", borderRadius:"30px", border:"1px solid #ffffff", 
+									boxSizing:"border-box", background:"rgba(255,255,255,0.3)", 
+									display:"flex", justifyContent:"center", alignItems:"center", fontFamily:"Poppins"}}>
+									|  || ||||| ||| ||| ||| ||||     ||
 							</Button>
+							</a.div>
 							<WhiteSpace lg/>
 							<WingBlank>
 							<WhiteSpace />
@@ -649,6 +755,7 @@ const App = () => {
 
 
 				<ParallaxLayer offset={1.3} speed={-0.3} style={{ pointerEvents: 'none' }}>
+
 					<img src={url('satellite4')} style={{ width: '15%', marginLeft: '70%' }} />
 					<Card style={{margin:"auto", bottom:"-10px", maxWidth:"280px", maxHeight:"30px",display:"flex" , justifyContent:"center", textAlign:"center", fontFamily:"Noto Sans JP", padding:"10px 10px"}}>秀知院学園周知の事実</Card>
 					<img src={OldTown} />
