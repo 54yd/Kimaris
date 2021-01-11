@@ -1,26 +1,30 @@
 {
   "files": {
-    "main.css": "/static/css/main.f839f115.chunk.css",
-    "main.js": "/static/js/main.ff187b8f.chunk.js",
-    "runtime-main.js": "/static/js/runtime-main.70552f76.js",
+    "main.css": "/static/css/main.94599683.chunk.css",
+    "main.js": "/static/js/main.72922261.chunk.js",
+    "runtime-main.js": "/static/js/runtime-main.1327b00c.js",
     "static/css/2.a547b4c4.chunk.css": "/static/css/2.a547b4c4.chunk.css",
-    "static/js/2.ccaf7008.chunk.js": "/static/js/2.ccaf7008.chunk.js",
+    "static/js/2.49cb319b.chunk.js": "/static/js/2.49cb319b.chunk.js",
     "static/js/3.b9c420be.chunk.js": "/static/js/3.b9c420be.chunk.js",
-    "static/js/4.93917347.chunk.js": "/static/js/4.93917347.chunk.js",
+    "static/js/4.b0bda70c.chunk.js": "/static/js/4.b0bda70c.chunk.js",
     "static/js/5.7d08da3d.chunk.js": "/static/js/5.7d08da3d.chunk.js",
     "index.html": "/index.html",
     "service-worker.js": "/service-worker.js",
-    "static/js/2.ccaf7008.chunk.js.LICENSE.txt": "/static/js/2.ccaf7008.chunk.js.LICENSE.txt",
+    "static/js/2.49cb319b.chunk.js.LICENSE.txt": "/static/js/2.49cb319b.chunk.js.LICENSE.txt",
     "static/js/3.b9c420be.chunk.js.LICENSE.txt": "/static/js/3.b9c420be.chunk.js.LICENSE.txt",
     "static/media/Cash register 2.0ec3651d.mp3": "/static/media/Cash register 2.0ec3651d.mp3",
     "static/media/Click back sounds 8.331a56eb.mp3": "/static/media/Click back sounds 8.331a56eb.mp3",
     "static/media/Duck.5ae1ad5d.glb": "/static/media/Duck.5ae1ad5d.glb",
     "static/media/Duck.d37da825.usdz": "/static/media/Duck.d37da825.usdz",
+    "static/media/Fox.27f34a6d.usdz": "/static/media/Fox.27f34a6d.usdz",
+    "static/media/Fox.c62e8dab.glb": "/static/media/Fox.c62e8dab.glb",
     "static/media/Galimatias  Joppe  Mintaka.a19ea23a.mp3": "/static/media/Galimatias  Joppe  Mintaka.a19ea23a.mp3",
     "static/media/JapaneseCityExample.cc8b8ff2.gif": "/static/media/JapaneseCityExample.cc8b8ff2.gif",
     "static/media/KanagawaExample.764441a2.gif": "/static/media/KanagawaExample.764441a2.gif",
     "static/media/Ocean1.d41aa071.mp3": "/static/media/Ocean1.d41aa071.mp3",
     "static/media/The Division 2  Theme Music.c498fdd2.mp3": "/static/media/The Division 2  Theme Music.c498fdd2.mp3",
+    "static/media/Toycar.2d8990b7.usdz": "/static/media/Toycar.2d8990b7.usdz",
+    "static/media/Toycar.2fcbbb3e.glb": "/static/media/Toycar.2fcbbb3e.glb",
     "static/media/circumference.7cd804c5.svg": "/static/media/circumference.7cd804c5.svg",
     "static/media/circumference_filled.5bfc9d8c.svg": "/static/media/circumference_filled.5bfc9d8c.svg",
     "static/media/cross.ff426a15.jpg": "/static/media/cross.ff426a15.jpg",
@@ -31,10 +35,10 @@
     "static/media/ping.a0246f13.mp3": "/static/media/ping.a0246f13.mp3"
   },
   "entrypoints": [
-    "static/js/runtime-main.70552f76.js",
+    "static/js/runtime-main.1327b00c.js",
     "static/css/2.a547b4c4.chunk.css",
-    "static/js/2.ccaf7008.chunk.js",
-    "static/css/main.f839f115.chunk.css",
-    "static/js/main.ff187b8f.chunk.js"
+    "static/js/2.49cb319b.chunk.js",
+    "static/css/main.94599683.chunk.css",
+    "static/js/main.72922261.chunk.js"
   ]
 }

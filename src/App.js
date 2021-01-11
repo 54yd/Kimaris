@@ -2,6 +2,10 @@
 import React from 'react'
 import { useState, useEffect, useRef } from 'react'
 import { css } from 'emotion'
+import Particles from "react-tsparticles"
+import particlesOptions from "./particles.json"
+import polynomialParticles from "./polynomialParticles.json"
+import nasaParticles from "./nasaParticles.json"
 
 //Addons
 import * as R from 'ramda'
@@ -51,7 +55,7 @@ import ToycarGLB from 'Toycar.glb'
 import ToycarUSDZ from 'Toycar.usdz'
 
 
-
+//Parallax
 import { Parallax, ParallaxLayer } from 'react-spring/renderprops-addons'
 
 //Sounds
@@ -66,6 +70,7 @@ import SFXduck8 from "./duck_2_quack_08.mp3"
 import SFXduckS2 from "./duck_2_quack_seq_02.mp3"
 import SFXduckS5 from "./duck_2_quack_seq_05.mp3"
 import SFXclick8 from "./Click back sounds 8.mp3"
+
 // *** App ***  
 
 const App = () => {
@@ -94,6 +99,7 @@ const App = () => {
 	const [isMobile, setIsMobile] = useState(false)
 	const [isMobileOrTablet, setIsMobileOrTablet] = useState(false)
 	const [isOverWidth, setIsOverWidth] = useState(false)	
+
 	// [TIPS] ES6 Destructure import caught by : (it is not key:value, means a command framed key:(const variable) then import as variable=key )
 	// BGMs
 	const [playBGMOcn1, {stop : stopBGMOcn1} ] = useSound(BGMOcean1,{ volume: 0.5 })
@@ -108,8 +114,12 @@ const App = () => {
 	const [playSFXduckS2, {stop : stopSFXduckS2} ] = useSound(SFXduckS2)
 	const [playSFXduckS5, {stop : stopSFXduckS5} ] = useSound(SFXduckS5)
 
+
+	// Master Data Parameters
+	// ------------------------------
 	const [currStage, setCurrStage] = useState(0);
 
+	// ------------------------------
 	const mesDuckBattle = [
 		{
 			mes:"げんき！げんき！",
@@ -150,6 +160,7 @@ const App = () => {
 	}
 
 	// *** UseEffect
+	// ------------------------------
 	useEffect(
 		() => { 	
 			const handleResize = () => setScreenSize({width : window.innerWidth, height : window.innerHeight })
@@ -218,6 +229,10 @@ const App = () => {
 	
 	// *** Constructor
 	
+
+	// CSS and Design
+	// ------------------------------
+
 	const RootDesign = css`
 		display: flex;
 		width:100%;
@@ -374,6 +389,7 @@ const App = () => {
  	}
 
 
+
 	// Modal
 	// ------------------------------
 
@@ -415,57 +431,8 @@ const App = () => {
 		if (!pNode) { e.preventDefault(); }
 	}
 
-	// Flip Card
-
-	const cardCSS = css`
-		div {
-			width: 100%;
-			height: 100%;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-
-		.c {
-			position: absolute;
-			max-width: 500px;
-			max-height: 500px;
-			width: 50px;
-			height: 50px;
-			cursor: pointer;
-			will-change: transform, opacity;
-		}
-		
-		.front,
-		.back {
-			background-size: cover;
-		}
-		
-		.back {
-			background-image: url(https://images.unsplash.com/photo-1544511916-0148ccdeb877?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1901&q=80i&auto=format&fit=crop);
-		}
-		
-		.front {
-			background-image: url(https://images.unsplash.com/photo-1540206395-68808572332f?ixlib=rb-1.2.1&w=1181&q=80&auto=format&fit=crop);
-		}
-	`
-
-
-	const FlipCard = () => {
-		const [flipped, set] = useState(false)
-		const { transform, opacity } = useSpring({
-			opacity: flipped ? 1 : 0,
-			transform: `perspective(600px) rotateX(${flipped ? 180 : 0}deg)`,
-			config: { mass: 5, tension: 500, friction: 80 }
-		})
-		return (
-			<div onClick={() => set(state => !state)}>
-				<a.div style={{ opacity: opacity.interpolate(o => 1 - o), transform }} />
-				<a.div style={{ opacity, transform: transform.interpolate(t => `${t} rotateX(180deg)`) }} />
-			</div>
-		)
-	}
-
+	// Stage Parameters (Master Data Parameters)
+	// ------------------------------
 
 	const stageParams = [
 		{
@@ -494,6 +461,8 @@ const App = () => {
 
 	
 
+	// UseSpring 
+	// ------------------------------
 
 	const [stateFadeMusicButton, toggleFadeMusicButton] = useState(true)
 	const { fadeMusicButtonX } = useSpring({ 
@@ -504,7 +473,8 @@ const App = () => {
 
 	//console.log(stageParams[currStage])
 	//console.log(yearParams[currStage])
-	// Parallax
+
+	// Parallax Helpers
 	// ------------------------------
 
 	// Little helpers
@@ -518,6 +488,10 @@ const App = () => {
 	
 	let parallax=null
 
+	// AR Helpers
+	// ------------------------------
+
+	// 
 	let arOptionProps = {
 		// "camera-controls" : false [TIPS] if you write "camera-controls", then it is activsted whether the value is false or not ( so be careful, nothing to write for disable )
 	}
@@ -548,25 +522,32 @@ const App = () => {
 
 			<div className={backgroundParallax}>
 
-						<div style={{
-							position: "absolute",
-							height:screenSize.height,
-							width:screenSize.width*1,
-							overflow: "hidden",
-						}}>
-							<div style={{
-									marginLeft:"-50%",
-									transform: "translateX(16.5%)",
-									marginTop:screenSize.height/(3+3)+"px",
-									display: "flex" , justifyContent:"center",alignItems:"center",
+				{/* Circular rotate object background Actor */}
+				<div style={{
+					position: "absolute",
+					height:screenSize.height,
+					width:screenSize.width*1,
+					overflow: "hidden",
+				}}>
+					<div style={{
+							marginLeft:"-50%",
+							transform: "translateX(16.5%)",
+							marginTop:screenSize.height/(3+3)+"px",
+							display: "flex" , justifyContent:"center",alignItems:"center",
 
-							}}>
-								<SymbolSoundOff className={BackStyleSymbolSound} style={{
-									zIndex:"10",		
-									}}/>
-							</div>				
-						</div>
-				{/* *** Background 3D   */}
+					}}>
+						{/* [FIXME] this translateX is relative at window's width so always correct, but so many magic ration number unfactorized, please desolve and be ease way  */}
+						<SymbolSoundOff className={BackStyleSymbolSound}/>
+					</div>				
+				</div>
+
+				{/*[FIX ME] it is too heavy to run */}
+				<Particles
+					style={{position: 'absolute', pointerEvents:"none", cursor:"default",opacity:"50%"}}
+		     	   options={nasaParticles}
+				/> 
+
+				{/* Background 3D Model Actor   */}
 				<div className={backgroundModelBoard}>
 
 						<model-viewer
@@ -606,8 +587,9 @@ const App = () => {
 					</model-viewer >
 				</div>
 
-
 			</div>
+
+			{/* Explanation Notification bar Actor */}
 
 			{ isOverWidth ||
 			<NoticeBar 	mode="closable" 
@@ -615,6 +597,7 @@ const App = () => {
 						style={{marginTop: 16+3+"px", marginLeft:15+5+"px", marginRight:40+15+"px"}}>このアプリは、「丑年」のはずが、「とある事件」により、何故か別の生物に支配されてしまいました。探索をして、様々なモノに触れ、事件の謎を解いてみましょう。謎を解くには「音」を聞く必要があります。</NoticeBar>
 			}
 
+			{/* BGM SWITCH INDICATOR Actor */}
 			<button
 				id="BGMSwitcher"
 				style={{
