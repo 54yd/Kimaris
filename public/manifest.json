@@ -5,7 +5,7 @@
   "background_color": "blue",
   "description": "everything become reality, the future is yours.",
   "display": "standalone",
-  "theme_color": "#337ab7",
+  "theme_color": "blue",
   "orientation": "portrait",
   "icons": [
     {

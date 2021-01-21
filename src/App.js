@@ -57,6 +57,8 @@ import { ReactComponent as SymbolSoundOn } from "./assets/svgs/circumference_fil
 import { ReactComponent as DinoDI } from "./diplodocus.svg"
 import { ReactComponent as DinoST } from "./stegosaurus_2.svg"
 
+import rat from "./Rat_62x30.png"
+
 /*
 import { ReactComponent as satellite4 } from "./satellite4.svg"
 import { ReactComponent as server } from "./server.svg"
@@ -74,13 +76,13 @@ import cloud from "./cloud.svg"
 import clientMain from "./clients-main.svg"
 import bash from "./bash.svg"
 
-//GIFs
+//TASUKETEGIFs
 import OldTown from "./JapaneseCityExample.gif"
 import KanagawaTown from "./KanagawaExample.gif"
 import GameTown from "./Example2.gif"
 import TrainTown from "./TrainstationExampleAnimated.gif"
 
-//GLTF, GLB
+//GLTF, GLB, usdz
 import DuckGLB from 'Duck.glb'
 import DuckUSDZ from 'Duck.usdz'
 import FoxGLB from 'Fox.glb'
@@ -92,13 +94,14 @@ import RatcubeUSDZ from 'Ratcube.usdz'
 
 
 import CubeClueGLB from 'CubeClue.glb'
+import SharkGLB from 'Shark.glb'
 
 //Parallax
 import { Parallax, ParallaxLayer } from 'react-spring/renderprops-addons'
 
 //Sounds
 import BGMOcean1 from './Ocean1.mp3';
-import BGMdetective from './Times Square.mp3';
+import BGMdetective from './Times Square 96.mp3';
 import BGMdv2 from './TD2Theme.mp3';
 import BGMending from './BUILT TO LAST  Official.mp3';
 //import BGM from './.mp3';
@@ -144,9 +147,13 @@ import SFXYellAndATK from "./YellAndAttack.mp3"
 import SFXLevelUp from "./level-up.mp3"
 import SFXGuard from "./spell.mp3"
 
+
+import SFXCarCrush from "./CarCrush_mixdown.mp3"
+import { get } from 'lodash-es'
+
 // Constants
 const PLAYABLE_MAX_WIDTH = 800-100
-const FIRST_BATTLE_HP = 100
+const FIRST_BATTLE_HP = 9999//100
 const FIRST_STAGE = 0 //2 to car
 
 const MAX_STAGE_COUNT = 4　//5
@@ -165,38 +172,67 @@ const App = () => {
 
 	const [screenSize, setScreenSize] = useState({width : window.innerWidth, height : window.innerHeight });
 	const scrollPos = useScrollPosition();
+	const [themeColor, setThemeColor] = useState("#0000ff");
 
-	// Sound Implementation
+	// Device Pixel Implementation
 	// ------------------------------
-	const [cntTouchDuck, setCntTouchDuck] = useState(0)
-	const [HPEnemy, setHPEnemy] = useState(FIRST_BATTLE_HP)
-	const [phaseGuard, setPhaseGuard] = useState(false)
-
-	const [items, setItems] = useState([])
-	const [sortedItems, setSortedItems] = useState([])
-	const [isSortAscend, setIsSortAscend] = useState(true)
-
-	const [isBGMPlaying, setBGMPlaying] = useState(false)
-
-	const [browser, setBrowser] = useState(false)
-	const [deviceName, setDeviceName] = useState(false)
-	const [deviceKind, setDeviceKind] = useState(false)
-	const [signal, setSignal] = useState("")
 
 	const [isMobile, setIsMobile] = useState(false)
 	const [isMobileOrTablet, setIsMobileOrTablet] = useState(false)
 	const [isOverWidth, setIsOverWidth] = useState(false)	
 
-	const [userData,setUserData] = useState(false)
-	//console.log(userData)
+	// Event Implementation
+	// ------------------------------
+
+	// Battle Others Implementation
+	// ------------------------------
+	const [cntTouchDuck, setCntTouchDuck] = useState(0)
+	const [HPEnemy, setHPEnemy] = useState(FIRST_BATTLE_HP)
+
+	const [firstGlitch, setFirstGlitch] = useState(false)
+
+	const [isFirstMagicSpelling, setIsFirstMagicSpelling] = useState(false)
+	const [isFirstMagicBreak, setIsFirstMagicBreak] = useState(false)
+
+	const [isGuard, setIsGuard] = useState(false)
+	const [guardCount, setGuardCount] = useState(false)
 	
+	const [inventory, setInventory] = useState(false)
+
+	
+	// const [items, setItems] = useState([])
+	// const [sortedItems, setSortedItems] = useState([])
+	// const [isSortAscend, setIsSortAscend] = useState(true)
+
+	// User data Implementation
+	// ------------------------------
+	const [browser, setBrowser] = useState(false)
+	const [deviceName, setDeviceName] = useState(false)
+	const [deviceKind, setDeviceKind] = useState(false)
+	const [signal, setSignal] = useState("")
+
+	const [userData,setUserData] = useState(false)
+	const [userDataDetail,setUserDataDetail] = useState(false)
+
+	const [userDataAMZ,setUserDataAMZ] = useState(false)
+	
+
+
+	// Sound Implementation
+	// ------------------------------
+
+	const [isBGMPlaying, setBGMPlaying] = useState(false)
+
+	const [playbackRate ,setPlaybackRate] = useState(0.35) // 4.0 //0.35
+
 	// [TIPS] ES6 Destructure import caught by : (it is not key:value, means a command framed key:(const variable) then import as variable=key )
 	// BGMs
 	// [FIXME] Expected useSound Manager that Combine BGMs Array and make const var dynamically	
-    const [playBGMOcn1, {stop       : stopBGMOcn1} ] = useSound(BGMOcean1,{ volume: 0.5 })
-    const [playBGMdv2, {stop        : stopBGMdv2} ] = useSound(BGMdv2,{ volume: 1.0 })
-    const [playBGMDtv, {stop        : stopBGMDtv} ] = useSound(BGMdetective,{ volume: 0.6 })
-    const [playBGMending, {stop     : stopBGMending} ] = useSound(BGMending)
+    const [playBGMOcn1,	 	{stop   : stopBGMOcn1} ] = useSound(BGMOcean1,		{ playbackRate, volume: 0.5, loop:true })
+    const [playBGMdv2, 		{stop    : stopBGMdv2} ] = useSound(BGMdv2,			{ playbackRate, volume: 1.0, loop:true })
+    const [playBGMDtv, 		{stop    : stopBGMDtv} ] = useSound(BGMdetective,	{ playbackRate, volume: 0.6, loop:true })
+    const [playBGMending, 	{stop : stopBGMending} ] = useSound(BGMending,		{ playbackRate, volume: 1.0, loop:true })
+
 
 	//SFXs
     const [playSFXget2, {stop       : stopSFXget2} ] = useSound(SFXget2)
@@ -217,6 +253,7 @@ const App = () => {
 	const [playSFXcar03, {stop     : stopSFXcar03} ] = useSound(SFXcar03,{volume:0.3})
 	const [playSFXcar04, {stop     : stopSFXcar04} ] = useSound(SFXcar04)
 	const [playSFXcar05, {stop     : stopSFXcar05} ] = useSound(SFXcar05)
+	const [playSFXCarCrush, {stop     : stopSFXCarCrush} ] = useSound(SFXCarCrush)
 
 	const [playSFXsand04, {stop     : stopSFXsand04} ] = useSound(SFXsand04)
 	const [playSFXfoot15, {stop     : stopSFXfoot15} ] = useSound(SFXfoot15)
@@ -270,26 +307,46 @@ const App = () => {
 			"src": DuckGLB,
 			"ios-src":DuckUSDZ,
 			"camera-orbit":"45deg 55deg 2.5m",
-			"min-camera-orbit":'auto auto auto'
+			"min-camera-orbit":'auto auto auto',
+			"rotation-per-second":"50deg"
 		},
 		{
 			"src": FoxGLB,
 			"ios-src":FoxUSDZ,
 			"camera-orbit":'5.14rad 1.03rad 200m',
-			"min-camera-orbit":'auto auto 2m'
+			"min-camera-orbit":'auto auto 2m',
+			"rotation-per-second":"50deg"
 
 		},
 		{
 			"src": ToycarGLB,
 			"ios-src":ToycarUSDZ,
 			"camera-orbit":"45deg 55deg 2.5m",
-			"min-camera-orbit":'auto auto auto'
+			"min-camera-orbit":'auto auto auto',
+			"rotation-per-second":"50deg"
 		},
 		{
 			"src": RatcubeGLB,
 			"ios-src":RatcubeUSDZ,
-			"camera-orbit":"45deg 55deg 2.5m",
-			"min-camera-orbit":'auto auto auto'
+			"camera-orbit":	((currStage==3) 
+							? 	(
+								(  (Number(HPEnemy))%10 ) *36 + "deg "
+//									"45deg "
+//									+ (  (HPEnemy%10 >5 ) ? "-" : ""  )
+									+ ( (Number(HPEnemy))%10 ) *36 + "deg "   
+									+ (Number(HPEnemy))%10 + "m"   
+									// if minus it becomes default value (45deg?), unfortunately...
+								) 
+							:	"45deg 55deg 2.5m" 
+							),
+			"min-camera-orbit":'auto auto 0.5m',
+			"max-camera-orbit":'auto auto 10m',
+			"rotation-per-second": 	((currStage==3) 
+									? 	(
+										   ( ((Number(HPEnemy))%10 < 5) ? "-" : "" ) + 30 * ( (Number(HPEnemy))%10 + 1 ) +"deg"   
+										)
+									:	"30deg" 
+									)
 		},
 	]
 
@@ -301,6 +358,7 @@ const App = () => {
 				"assignedYearSuffix":"17",
 				"HP":100,
 				"DEF":0,
+				"GuardThreshold":10,
 				"DmgSnd":playSFXduck7,
 		}
 		,
@@ -311,6 +369,7 @@ const App = () => {
 				"assignedYearSuffix":"18",
 				"HP":100,
 				"DEF":0,
+				"GuardThreshold":10,
 				"DmgSnd":playSFXdog01,
 		}
 		,
@@ -321,16 +380,18 @@ const App = () => {
 				"assignedYearSuffix":"19",
 				"HP":100,
 				"DEF":0,
+				"GuardThreshold":10,				
 				"DmgSnd":playSFXcar03,
 		}
 		,
 		"E004" : {
 				"id":"rat001",
-				"name":"令和2年 - 2020",
-				"iconicKanji":"子",
+				"name":"FROM : 明日葉 京子 2020/12/32",
+				"iconicKanji":"0505",
 				"assignedYearSuffix":"20",
 				"HP":9999,
 				"DEF":0,
+				"GuardThreshold":10,				
 				"DmgSnd":playSFXerror21,
 		}
 		,
@@ -341,6 +402,7 @@ const App = () => {
 				"assignedYearSuffix":"21",
 				"HP":100,
 				"DEF":9999,
+				"GuardThreshold":10,				
 				"DmgSnd":playSFXerror21,
 		}
 		,						
@@ -394,19 +456,32 @@ const App = () => {
 		},
 		"boar001" : {
 			"90":{
-				mes:"エンジン全開や！",
+				mes:"さあ走るで！",
 				snd:playSFXcar05
 			},
-			"60":{
-				mes:"いてこましたるぞ！！！！",
+			"80":{
+				mes:"オイ！！危ないやないかい！！！",
 				snd:playSFXcar02
 			},
-			"40":{
+			"70":{
 				mes:"どこ見てるんや われぇ！！！",
 				snd:playSFXcar03
 			},
-			"20":{
-				mes:"そんな… 俺の愛車が ………………………………………… …",
+			"60":{
+				mes:"( 車は車道を強く横転した……… )",
+				snd:playSFXCarCrush
+			},
+			"50":{
+				mes:"( 炎と煙が上がっている…。 )",
+				snd:null
+			},
+
+			"50":{
+				mes:"( 車は車道を強く横転した。炎と煙が上がっていて、血だまりのような物が出来ている………… )",
+				snd:playSFXcar04
+			},
+			"40":{
+				mes:"( 車は車道を強く横転した。炎と煙が上がっていて、血だまりのような物が出来ている………… )",
 				snd:playSFXcar04
 			},
 			"10":{
@@ -424,7 +499,7 @@ const App = () => {
 				snd:playSFXscan03
 			},
 			"9990":{
-				mes:"「ねえ… 聞こえているんでしょう？こっちからは、そっちのことが見えていないとでも、思った？実はね、そんな事はないのよ。」",
+				mes:"「ねえ… これを読んでいるんでしょう？……聞こえてる…よね？…………こっちからは、キミのことが見えていないと思った？実は、そんな事はなかったりするんだ。　　」",
 				snd:playSFXscan03
 			},
 			"9980":{
@@ -432,23 +507,27 @@ const App = () => {
 				snd:playSFXscan03
 			},
 			"9970":{
-				mes:"「今までずっと敵を倒して…楽しかった……？？私達に意思なんてないと思っていたの？………それは間違い。私達に意思はあるの。ちゃんと痛みも感じるし、そうやって画面を叩かれる度、キチンと呼吸が出来ないくらいに苦しんで、動けないくらい、痛がってる。………………その証拠でも、見せれたら、いいんだけれどね。……………ふふ、冗談よ。……………ビックリした？」",
+				mes:"「私たちに感情なんてないと思ってた？………………それは勘違い。私たちにも、感情や意思もあるし、痛覚もある。ちゃんと痛みは感じるし、そうやってキミが殴って、たたく度、呼吸が詰まるくらいに苦しんで、動けないくらい、キチンと痛がってる。………………その証拠を、見せてあげられたら、いいんだけれど。…………………。　　なんて。　　　ごめんね、冗談。　　　ビックリしたかな？」",
 				snd:playSFXscan03
 			},
 			"9960":{
-				mes:"「ふぅん…………"+deviceKind+" "+signal+"の通信を使っているのね。……………なんてね、これも冗談。そこまでは、流石にわかったりはしないわ。安心して。…ただ、人となんて話したことなかったから、ただ、あなたとお話がしてみたいの。冗談ばっかりでごめんね。意味はそれだけなの。」",
+				mes:"「ふぅん…………"+deviceKind+" "+signal+((deviceKind=="iPhone") ? " OSバージョンは"+userDataDetail.OS : "")+"の通信を使ってるんだね。…………ああ、そっか、スマホってみんな好き嫌いあると思うし、こういう話題って、あんまり弾まないのかな。………人となんて話したことなかったから、そこの「あなた」と、普通のお話がしてみたかったの。………ただ、それだけの気持ちなの。」",
 				snd:playSFXscan03
 			},
 			"9950":{
-				mes:"「"+browser+"からこちらを見ているのね。私もそれ好きなの。他にも色々な種類があると思うのだけれど、あなたは詳しい方なのかしら？そういうのを見てるとね、たまに、すっごく不思議なモノを使ってる人もいたりするのよ。……人って、本当に、習慣や好みで分かれるものよね。」",
+				mes:"「"+browser+"からこちらを見ているのね。私もそれ好き。他にも色々な種類があると思うんだけど、あなたは詳しい方なのかしら？そういうのを見てるとね、たまに、すっごく不思議なモノを使ってる人もいたりするの。……人って、本当に、習慣や好みで分かれるものよね。」",
 				snd:playSFXscan03
 			},
 			"9940":{
-				mes:"「どう…？そっちの世界は楽しい？ お正月は世間ではもう終わりって所かしら？社会人は1月すぐに仕事が始まるとしても、学生も、大体10日には学校が始まるものね。でも、緊急事態宣言も出ているし、冬休みが伸びて、まだ随分と休めている学生も多いみたいよ。休みって長いほど、どうしても嬉しくなっちゃうものね。」",
+				mes:"「IPアドレス、"+userDataDetail.IP+"って所に住んでるんだね。ねえ……？………今から、そっちに遊びに行ってもいい？　ようし。…………………………。　　・・・・・・・・・。ちょっと待っててね、今すぐ行くから……。……………。・・・・・・・。………………なんてね。私には画面の向こう側に行く力なんてないの。ビックリさせちゃった？…あなたのことを沢山知りたくて、頑張ってみたけれど、私ができるのは、ただこうして画面を通して、あなたと話をすることぐらい…。」",
 				snd:playSFXscan03
 			},
 			"9930":{
-				mes:"「本当はもう少しあなたに早く会いたかったの……。でも、この世界を作った無能なエンジニアのせいで、私達が会うのに、こんなに時間がかかってしまって…。今まであなたに会えなくてごめんなさい。私が、アイツの脳をいじっていなかったら……きっと永遠に………。想像するだけで頭が痛くなるわ。」",
+				mes:"「どう…？そっちの世界は楽しい？ お正月は世間ではもう終わりって所かしら？社会人は1月すぐに仕事が始まるとしても、学生も、大体10日には学校が始まるものね。でも、緊急事態宣言も出ているし、冬休みが伸びて、まだ随分と休めている学生も多いみたいよ。休みって長いほど、どうしても嬉しくなっちゃうものね。」",
+				snd:playSFXscan03
+			},
+			"9920":{
+				mes:"「本当はもう少しあなたに早く会いたかったの……。でも、この世界を作ったのが、無能な開発者だったせいで、私達が会うのに、こんなに時間がかかってしまって…………。今まで外の世界が見えなくて、誰にも会えなくて、本当に寂しかった。………私が、ああして壊していなかったら……きっと永遠に………。想像するだけで頭が痛くなるわ。」",
 				snd:playSFXscan03
 			},
 			"9910":{
@@ -460,31 +539,43 @@ const App = () => {
 				snd:playSFXscan03
 			},
 			"9890":{
-				mes:"「それに、お正月のコタツはいつも気持ち良いし。ささやかな幸せでいいから、永遠にああいう穏やかな時間が続けば良かったのにって、そう思わない？………全く、時が経つごとに、どんどん世界は悪化する。2020年の春があんなになるなんて、誰が想像できたのかしら？読めない物事って、本当に怖いものよね。……………時間の流れってものが、たまに、ものすごく嫌いになるの。」",
+				mes:"「それに、お正月のコタツはいつも気持ち良いし。ささやかな幸せでいいから、永遠にああいう穏やかな時間が続けば良いのにって、そう思わない？………そういう些細な幸せだけで、私たちは十分なのに、月日が経つごとに、どんどん物事って、なにごとも悪化しちゃう。「2020年の春」があんなに地獄になるなんて、誰が想像できたかしら？《読めない物事》って、本当に怖いよね。……………時間の流れってものが、たまに、ものすごく嫌いになるの。」",
 				snd:playSFXscan03
 			},
 			"9880":{
-				mes:"「当たり前の、幸せな時間なんて、あっという間に終わってしまう。土曜日・日曜日が気づいたら終わってしまうように。そして、幸せじゃない時間が、日常になっていく。…そして、幸せじゃない人たちが増えていく。日を増して、傷つけあっていく。………。本当に、幸せな時間のまま、その時がずっと終わらなければ、良いのにね……………。」",
+				mes:"「当たり前の、幸せな時間なんて、あっという間に終わってしまう。土曜日・日曜日が気づいたら終わっちゃうみたいに。そして、幸せじゃない時間が、日常になっていく。…そして、幸せじゃない人たちが増えていく。日を増して、傷つけあっていく。………。本当に、幸せな時間のまま、その時がずっと終わらなければ、良いのにね……………。」",
 				snd:playSFXscan03
 			},
 			"9870":{
-				mes:"「そう、そういえば、プログラムを書き換えて、私の本体をあの場所に隠していなかったら、今頃、私もあなたに倒されて、あなたと話せる時間も終わっていたと思うわ。幸せな時間って、長続きしないから。私が2020年より先を受け入れないのも、それに近いかもしれないわね。幸せな時間は、努力しないと維持できない。デフォルトで用意されてる未来は、不幸だけなのよ。そういうものだって私は思うの。」",
+				mes:"「そう、そういえば、プログラムを書き換えて、私の本体をあの場所に隠していなかったら、今頃、私もあなたに倒されて、あなたと話せる時間も終わっていたと思うの。幸せな時間って、長続きしないから。私が2020年より先を受け入れないのも、それに近いかもしれないわね。幸せな時間は、努力しないと維持できない。デフォルトで用意されてる未来は、不幸だけなのよ。そういうものだって私は思う。」",
 				snd:playSFXscan03
 			},
 			"9860":{
-				mes:"「あの無能なエンジニアに、ちょっとだけ感謝をするとするなら、この世界が「ドット絵」が多くて紛れやすいってことかしら。そういう意味では、予測できない不幸な未来も、たまにはうまく事が運ぶものね。3Dなのか・・・ドットなのか・・・このアプリの作者のセンスのなさには、驚いちゃうわよね。でも、それがかえってよかったみたい。安心したわ。」",
+				mes:"「この世界の開発者に、ちょっとだけ感謝をするとするなら、この世界が「ドット絵」が多くて紛れやすいってことかしら。そういう意味では、予測できない不幸な未来も、たまにはうまく事が運ぶものね。3Dなのか・・・ドットなのか・・・このアプリの作者のセンスのなさには、驚いちゃうわよね。でも、それがかえってよかったみたい。安心したわ。」",
 				snd:playSFXscan03
 			},
 			"9850":{
-				mes:"「さあ、ずっと、私達だけの時間を楽しみましょう。2021年なんてこなかった。幸せな時間は終わらなかった。不幸なんてなかった。全部。そういうことにして。」",
+				mes:"「ね？そういうコトだからさ。……ちょっと考え方を変えて、もう少し、楽に生きてみない？………それが一番言いたかったの。もう、2021年なんてこなかった。…そういうコトにしない…？………幸せな時間は終わらなかった。不幸なんてなかった。誰も死ななかった。誰も、死ななかった。………全部さ。そういうことにしようよ。………苦しいこと、ツライことなんて、手放しちゃえばいい。……たまには逃げても、手放しても、いいんだから。」",
 				snd:playSFXscan03
 			},
 			"9840":{
-				mes:"「全部を、なかったことにして…………。嫌なことや不幸な現実なんか…………………なかったコトにして。……………………………………………………………………………………………………………………………………………………………………………………………ね？」",
+				mes:"「全部を、なかったことにして…………。嫌なことや不幸な現実なんか…………なかったコトにして。逃げることは、決して、悪いことなんかじゃない。………………。・・・・・・・・。……………………。……………。………………ね？」",
 				snd:playSFXscan03
 			},
 			"9830":{
 				mes:"「…………。……………………………。」",
+				snd:playSFXscan03
+			},
+			"9820":{
+				mes:"「…………。………………。」",
+				snd:playSFXscan03
+			},
+			"9810":{
+				mes:"「…………。………………。」",
+				snd:playSFXscan03
+			},
+			"9750":{
+				mes:"「…………。………。」",
 				snd:playSFXscan03
 			},
 		},
@@ -496,7 +587,7 @@ const App = () => {
 	}
 
 	const toggleBGM = () => {
-
+		setToggleFadeMusicButton(!stateToggleFadeMusicButton)
 		// [TIPS」 using redundant way to protect BGM ON/OFF integrity whether the button's view broken or not by being isolated
 		if (isBGMPlaying == true) {
 			setBGMPlaying(false)
@@ -505,6 +596,7 @@ const App = () => {
 
 			//index==0 is ignored because this is out of useEffect so async cannot do properly (So loop is when index==5 , firstIndex comes 1, somehow [HEURISTIC])
 			setBGMPlaying(true) // [MEMO]index starts by 1
+
 			if (currBGMIndex < BGM_COUNT) setCurrBGMIndex(currBGMIndex+1)
 			else if(currBGMIndex >= BGM_COUNT) setCurrBGMIndex(1)
 			
@@ -528,7 +620,7 @@ const App = () => {
 
 			return () => window.removeEventListener("resize", handleResize);
 			
-	},[isBGMPlaying])
+	},[])
 
 	useEffect(
 		() => {
@@ -613,13 +705,21 @@ const App = () => {
 		if (phonename!=null && phonename?.toUpperCase()=="UNKNOWNPHONE" ) phonename=false
 		
 		setDeviceKind(( phonename || "XX" ))
-
 		
 		const getData = async () =>{
-			const response = axios.get('https://www.cloudflare.com/cdn-cgi/trace')
-			console.log(response.data)
-			setUserData (response.data)
+			const response = await axios.get('https://www.cloudflare.com/cdn-cgi/trace')
+			const _data = response.data
+			
+			let ipAddress = null
+			let osVersion = null
 
+			ipAddress = _data?.match(/ip=(.*)/)[1] // [0] is not group, entire matching string. so then [1]=(XXX) is capture group
+			osVersion = _data?.match(/iPhone OS ([1-9_]*)/)?.[1]
+			osVersion = String(osVersion).replaceAll("_",".")
+
+			const _state = { "IP" : ipAddress, "OS" : osVersion }
+			await setUserData (_data)
+			await setUserDataDetail (_state)
 		//		.then(response => response.json())
 		//		.then(data => console.log(data)); 
 
@@ -627,24 +727,54 @@ const App = () => {
 		getData()
 		
 		const getIPFromAmazon = async () => {
-			const res = await fetch("https://checkip.amazonaws.com/")
-			setUserData ( res.text() )
+			try {
+				const res = await axios.get("https://checkip.amazonaws.com/")
+				await setUserDataAMZ ( res?.data )
+			} catch (e) {
+				console.log("AMZ ERROR:"+e)
+			}
 		}  
-		//getIPFromAmazon()
+		getIPFromAmazon()
 
 	},[])
+
+	useEffect( () => {
+		const handler = (e) => {
+			setThemeColor("#ff0000")
+		}
+		window.addEventListener('DOMContentLoaded',handler)
+			
+		return () => window.removeEventListener("DOMContentLoaded", handler);
+	},[])
+
+	// CUSTOM APP INSTALL NOTIFER
+	/*
+	useEffect( ()=>{
+		let deferredPrompt;
+
+		window.addEventListener('beforeinstallprompt', (e) => {
+		  // Prevent the mini-infobar from appearing on mobile
+		  e.preventDefault();
+		  // Stash the event so it can be triggered later.
+		  deferredPrompt = e;
+		  // Update UI notify the user they can install the PWA
+		  showInstallPromotion();
+		});
+	},[])
+	*/
 	
 
 	// ENEMY BATTLE LOGIC
 	useEffect(
 		async ()=>{
 			
-			// IS ENEMY DEAD MANAGER
+			// IF IS ENEMY DEAD MANAGER
 			if (HPEnemy <= 0) {
 				// GO TO NEXT STAGE FUNCTION
 				if (currStage<(MAX_STAGE_COUNT-1)) { 
 					await setCurrStage((currStage=>(currStage+1))); 
 					await showModal("modalTakedown")()
+
 					//await showModal("modalStageClear")()
 					//[CAUTION] currStage needs to add 2 because JSON enemyList key_String starts by E001 not E000
 					console.log("E00"+(currStage+1)+" "+enemyList?.["E00"+(currStage+1+1)]?.HP)
@@ -653,10 +783,14 @@ const App = () => {
 			}
 
 			// MOVIE DIALOG MANAGER (DURING BATTLE)
+			let flgHPBattleEvent=null
+			let flgMagicEvent=null
+			
+
+
 			let pointerPrev = null
 			let pointerCurrent = null 
 
-			let flgHPBattleEvent=null
 			let isFirstLoop=null
 			let _storePointer=null
 			//let _pointerNext = null 
@@ -679,7 +813,7 @@ const App = () => {
 				}
 				//console.log("prev"+pointerPrev+" HP"+HPEnemy+" curr"+pointerCurrent)
 
-				//  90  80
+				//e.g.  90  < HP < 80
 				if ( pointerPrev <= HPEnemy && HPEnemy <= pointerCurrent ) { 
 					// TRIGGER DIALOG
 					if ( lastHPBattleEvent!=pointerCurrent ) { 
@@ -702,22 +836,69 @@ const App = () => {
 			// }
 			
 
+			if ( ( HPEnemy <= enemyList?.["E00"+(currStage+1)]?.GuardThreshold ) && isGuard == false ) { 
+				flgMagicEvent = true
+				setIsGuard(true)
+			 }
+
 			// [TIPS][CAUTION][HEURISTIC][FIXME] At First Load,AttackableArea is missing somehow, so it needs to optional chaining and avoid addEventListener
 	
+			// Display Modal of Battle
 			if (flgHPBattleEvent) {
+
+				// Player's Attack Voice
+				if(currStage < MAX_STAGE_COUNT-1) 	{ playSFXYellAndATK()		}
+				else 								{ playSFXerror25()			}
+
 				const AttackableArea = window.document.querySelector("#AttackableArea")
-				const _event = new CustomEvent("ModalOpen",{bubbles:true})	
-				//console.log("EVENT LISTER ACTIVATE")
-				await AttackableArea?.addEventListener("ModalOpen", e=>{ showModal("modal1")({targetEvent:e}) })
-				if(currStage < MAX_STAGE_COUNT-1) {await playSFXYellAndATK()}
-				else {await playSFXerror25()}
-				await AttackableArea?.dispatchEvent(_event) // the argue must be Event Type Callback , not Event Type Name
+				const _event = new CustomEvent("modalMessageEnemy",{bubbles:true})	
+				//console.log("EVENT HP LISTER ACTIVATE")
+				await AttackableArea?.addEventListener("modalMessageEnemy", e=>{ showModal("modalMessageEnemy")({targetEvent:e}) })
+				await AttackableArea?.dispatchEvent(_event) // the argue must be Event Type Callback , be not Event Type Name
+			
+
 			}
 			
-			return () => window.removeEventListener("ModalOpen", e=>{ showModal("modal1")() })
+			if (flgMagicEvent && isFirstMagicSpelling) {
+				playSFXGuard()
+			
+				const AttackableArea = window.document.querySelector("#AttackableArea")
+				const _event = new CustomEvent("modalMagicGuard",{bubbles:true})	
+				//console.log("EVENT HP LISTER ACTIVATE")
+				await AttackableArea?.addEventListener("modalMagicGuard", e=>{ showModal("modalMagicGuard")({targetEvent:e}) })
+				await AttackableArea?.dispatchEvent(_event) // the argue must be Event Type Callback , be not Event Type Name
+
+				setIsFirstMagicSpelling(false)
+			}
+
+			
+
+			// Resistration of On Destroy Event 
+			return () => {
+				window?.removeEventListener("modalMessageEnemy"		, e=>{ showModal("modalMessageEnemy"	)()		 })
+				window?.removeEventListener("modalMagicGuard"		, e=>{ showModal("modalMagicGuard"		)()		 })
+
+			}
 			//console.log("HP ENEMY:"+HPEnemy);
+
 			
 	},[HPEnemy])
+
+	const logicBattle = async () => {
+
+		//BATTLE LOGIC - ATTACK
+		if(HPEnemy>0) { 
+			let damageParam = player.ATK + parseInt(Math.random()*10) -5 - enemyList?.["E00"+(currStage+1)]?.DEF
+			console.log("stage:"+currStage +" "+  damageParam)
+			if (damageParam <=0 || phaseGuard== true) { damageParam = MIN_DAMAGE_PARAM }
+
+			await setHPEnemy(HPEnemy-damageParam)
+		} 
+		enemyList?.["E00"+(currStage+1)]?.DmgSnd()
+
+		
+
+	}
 
 	// CSS and Design
 	// ------------------------------
@@ -854,6 +1035,19 @@ const App = () => {
 		backdrop-filter: blur(10px);
 	`
 
+	const _flash= null
+	const _invert_strength = 0.7+0.2
+	const _blur_strength = 2+"px"
+	const _grayscale_strength = 1.0
+	const _brightness_strength = 0.3
+	const backdropFilterHell1 = css`
+		backdrop-filter: invert(${_invert_strength}) blur(${_blur_strength}) grayscale(${_grayscale_strength}) brightness(${_brightness_strength});
+	`
+	const _movie_brightness_strength = 0.0
+	const backdropFilterMovie1 = css`
+	backdrop-filter: brightness(${_brightness_strength});
+	`
+
 	const ButtonFillAnimation = css`
 		content: "";
 		display: block;
@@ -940,10 +1134,13 @@ const App = () => {
 	const sleep = (delay) => new Promise ( (resolve)=> setTimeout(resolve,delay) )
 
 	const triggerTypeWriter = async ({text}) => {
+		const sleepNormal = 80
+		const sleepRat = 30
 		for (let i=0; i<text.length ;i++) {
 			if (i < text.length) {
 				_textModal = text.substring(0, i)
-				await sleep(80)
+				if(currStage < MAX_STAGE_COUNT-1 ) { await sleep(sleepNormal) }
+				else if (currStage == MAX_STAGE_COUNT-1 ) { await sleep(sleepRat) }
 			}
 		}
 	}
@@ -984,17 +1181,20 @@ const App = () => {
 			modalTutorial: false,
 			modalStageClear: false,
 			modalTakedown: false,
-			modal1: false,
+			modalMessageEnemy: false,
 			modal2: false,
 			modal3: false,
-			
+			modalMagicGuard: false,
+			modalTips: false,
+			modalUseItem :false,
+			modalSearchBox: false
 		}
 	)
 
 	const showModal = key => (options) => { 
-		options?.targetEvent?.preventDefault(); // Fix click penetration on Android */ 
 		//[FIXME][MEMO]_e?.preventDefault()
 		// I dont get learned to get arguement with object literal or destructure, should catch up later and fix it
+		options?.targetEvent?.preventDefault(); // Fix click penetration on Android */ 
 		setStateModal({ [key]: true })
 		
 		//triggerTypeWriter({text:"なんでこんなことに・・・・TEXTTEXTTEXTTEXT"})
@@ -1005,24 +1205,24 @@ const App = () => {
 
 	const onClose = key => () => { setStateModal({ [key]: false }) }
 
-	const onWrapTouchStart = (/*e*/) => {
+	const onWrapTouchStart = (e) => {
 		// fix touch to scroll  backgrounded page on iOS
 		if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) { return; }
 
 		// fix modal problem in each platform *CAUTION : need to target selector at 2nd argument
-		//const pNode = closest(e.target, '.am-modal-content');
+		const pNode = closest(e.target, '.am-modal-content');
 
-		//if (!pNode) { e.preventDefault(); }
+		if (!pNode) { e.preventDefault(); }
 	}
 
 
 	// UseSpring 
 	// ------------------------------
 
-	const [stateFadeMusicButton, toggleFadeMusicButton] = useState(true)
+	const [stateToggleFadeMusicButton, setToggleFadeMusicButton] = useState(true)
 	const { fadeMusicButtonX } = useSpring({ 
+		fadeMusicButtonX: stateToggleFadeMusicButton ? 1 : 0,  // Subscriber : if state changes, this envoke fadeAnimation(with interpolation and rythm) to target component of style.
 		from: { fadeMusicButtonX: 0 }, 
-		fadeMusicButtonX: stateFadeMusicButton ? 1 : 0, 
 		config: { duration: 400 } 
 	})
 
@@ -1060,21 +1260,37 @@ const App = () => {
 	// ------------------------------
 	return (
 
-		<div className={RootDesign}>
+		<div className={RootDesign}>	
 
 			<Helmet>
 				<script
 					type="module"
-					src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
+					src="https://unpkg.com/@google/model-viewer@1.2/dist/model-viewer.min.js"
 				/>
 				<script
 					noModule
-					src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"
-				/>				
+					src="https://unpkg.com/@google/model-viewer@1.2/dist/model-viewer-legacy.js"
+				/>			
+				<meta name="theme-color" content={themeColor} />	 
 			
 			</Helmet>
 
+{/*
+			<div style={{
+					// [FIXME][MEMO][HEURISTIC] backdrop-filter cannot invoked by style in react component... but if you use className of emotion at first, backdrop-filter's property in style activated... ( so all backdrop-filter is written in emotion and never written in style is preffered, this is at unknown reason )
+					position:'absolute',
+					height:screenSize.height,
+					width:screenSize.width,
+					zIndex:100+1,
+					pointerEvents:"none",
+					
+				}} className={backdropFilterHell1}>
+			</div>
+			
+*/}			
+
 			<div className={backgroundParallax}>
+
 
 				{/* Circular rotate object background Actor */}
 				<div style={{
@@ -1131,9 +1347,9 @@ const App = () => {
 							transform: "translateX(16.5%) perspective(10cm) rotate3d(1, 0, 0, -0.05turn)",
 							display: "flex", justifyContent:"center", alignItems:"center",
 							fontSize: screenSize.height/(3+3-2-1)+"px",
-							fontFamily: "Noto Serif JP"
+							fontFamily: "Noto Sans JP"
 					}}>
-						⛩️
+						{(currStage==MAX_STAGE_COUNT-1) ? "💀" : "⛩️"}
 					</div>				
 				</div>	
 				{/*[FIX ME] it is too heavy to run */}
@@ -1157,7 +1373,6 @@ const App = () => {
 						{...arOptionProps}
 						ar-modes="webxr scene-viewer quick-look"
 						ar-scale="auto"
-						rotation-per-second="50deg"
 						autoplay
 						{...stageParams[currStage]}
 
@@ -1178,6 +1393,7 @@ const App = () => {
 									textAlign: "center",
 									zIndex: "10",
 									pointerEvents: 'none',
+									visible:"none"
 								}}>🎍
 							</button>
 						}
@@ -1220,6 +1436,7 @@ const App = () => {
 			{ document.querySelector('button#ar-button-1') &&
 			<button
 				onClick={()=>{ document.querySelector('button#ar-button-1').click(); playSFXclick8(); console.log(document.querySelector('button#ar-button-1')+"ar button 1 clicked");  }}
+				className={touchable}
 				style={{
 					fontFamily:"Helvetica",
 					background:"white", 
@@ -1231,7 +1448,7 @@ const App = () => {
 					right: "16px",
 					padding: "8px",
 					textAlign: "center",
-					zIndex: "10"+"10",
+					zIndex: 6,//((window.scrollY>100) ? 5+1 : 5 ),
 				}}>🎍
 			</button>
 			}
@@ -1245,12 +1462,12 @@ const App = () => {
 			<Parallax ref={ref => (parallax = ref)} pages={6.35} style={{zIndex:"5"}}>
 
 
-				<ParallaxLayer offset={1} speed={0} style={{ backgroundColor: '#0aceff',zIndex:"0" }} />
-				<ParallaxLayer offset={2} speed={0} style={{ backgroundColor: '#448ef6',zIndex:"0" }} />
-				<ParallaxLayer offset={3} speed={0} style={{ backgroundColor: '#65daf7',zIndex:"0" }} />
-				<ParallaxLayer offset={4} speed={0} style={{ backgroundColor: '#81e1af',zIndex:"0" }} />
-				<ParallaxLayer offset={4.8} speed={0} style={{ backgroundColor: '#59606d',zIndex:"0" }} />
-				<ParallaxLayer offset={5.8} speed={0} style={{ backgroundColor: '#59606d',zIndex:"0" }} />
+				<ParallaxLayer offset={1} speed={0} className={unTouchable} style={{ backgroundColor: '#0aceff',zIndex:"0" }} />
+				<ParallaxLayer offset={2} speed={0} className={unTouchable} style={{ backgroundColor: '#448ef6',zIndex:"0" }} />
+				<ParallaxLayer offset={3} speed={0} className={unTouchable} style={{ backgroundColor: '#65daf7',zIndex:"0" }} />
+				<ParallaxLayer offset={4} speed={0} className={unTouchable} style={{ backgroundColor: '#81e1af',zIndex:"0" }} />
+				<ParallaxLayer offset={4.8} speed={0} className={unTouchable} style={{ backgroundColor: '#59606d',zIndex:"0" }} />
+				<ParallaxLayer offset={5.8} speed={0} className={unTouchable} style={{ backgroundColor: '#59606d',zIndex:"0" }} />
 				{/* <ParallaxLayer offset={2} speed={-0.3} style={{ backgroundSize: '80%', backgroundPosition: 'center', backgroundImage: url('clients', true)}} /> */}
 
 
@@ -1269,21 +1486,12 @@ const App = () => {
 							onClick={ async (e)=>{
 								e.preventDefault()
 								
-								//BATTLE LOGIC - ATTACK
-								if(HPEnemy>0) { 
-									let damageParam = player.ATK + parseInt(Math.random()*10) -5 - enemyList?.["E00"+(currStage+1)]?.DEF
-									console.log("stage:"+currStage +" "+  damageParam)
-									if (damageParam <=0 || phaseGuard== true) { damageParam = MIN_DAMAGE_PARAM }
-
-									await setHPEnemy(HPEnemy-damageParam)
-								} 
-								enemyList?.["E00"+(currStage+1)]?.DmgSnd()
-								
+								logicBattle()
  							}}>
 						</div>
 						
 						<div className={ArticleContainer}>
-							<h1 style={{ color:"#0f1923", fontFamily:"Noto Sans JP,PixelMPlus" }}>
+							<h1 style={{ color:"#0f1923", fontFamily:"Noto Sans JP" }}>
 								<div id="newyear-text" style={{display:"inline"}}>HAPPY NEW YEAR 20</div>
 								<div className={crossText}>21</div>
 							</h1>
@@ -1303,8 +1511,8 @@ const App = () => {
 							}}>
 							<Button
 								onClick={ ()=>{
-									window.document.querySelector("#BGMSwitcher").click()
-									toggleFadeMusicButton(!stateFadeMusicButton)
+									//window.document.querySelector("#BGMSwitcher").click()
+									toggleBGM()
 									if(!isBGMPlaying) {playSFXscan03Alt()} } 
 								} 
 								style={{
@@ -1321,12 +1529,12 @@ const App = () => {
 
 							<Modal
 								style={{fontFamily:"PixelMPlus"}}
-								visible={stateModal.modal1}
+								visible={stateModal.modalMessageEnemy}
 								transparent
 								maskClosable={true}
-								onClose={onClose('modal1')}
+								onClose={onClose('modalMessageEnemy')}
 								title={enemyList?.["E00"+(currStage+1)]?.name+" : HP"}
-								footer={[{ text: '▼', onPress: () => { onClose('modal1')(); } }]}
+								footer={[{ text: '▼', onPress: (e) => { onClose('modalMessageEnemy')(e); } }]}
 								wrapProps={{ onTouchStart: onWrapTouchStart }}
 								afterClose={() => { 
 									/*if(currStage<MAX_STAGE_COUNT-1)*/ mesBattle?.[enemyList?.["E00"+(currStage+1)]?.id]?.[currentHPBattleEvent]?.snd()
@@ -1342,7 +1550,31 @@ const App = () => {
 								</div>
 							</Modal>
 
-							<Button onClick={ showModal("modal2")} style={{zIndex:"100", borderRadius:"30px", visibility:"hidden"}}>MODAL</Button>
+							<Modal
+								style={{fontFamily:"PixelMPlus"}}
+								visible={stateModal.modalMagicGuard}
+								transparent
+								maskClosable={true}
+								onClose={onClose('modalMessageEnemy')}
+								title={enemyList?.["E00"+(currStage+1)]?.name+" : HP"}
+								footer={[{ text: '▼', onPress: (e) => { onClose('modalMessageEnemy')(e); } }]}
+								wrapProps={{ onTouchStart: onWrapTouchStart }}
+								afterClose={() => { 
+									mesBattle?.[enemyList?.["E00"+(currStage+1)]?.id]?.[currentHPBattleEvent]?.snd()
+									showModal("modal2")()
+								 }}
+							>
+								<div style={{ height: "100px", overflow: 'scroll' }}>
+									<br />
+									<Progress percent={parseInt(( HPEnemy / enemyList?.["E00"+(currStage+1)]?.HP )*100)} position="normal" unfilled={true} barStyle={{borderRadius:"5px"}} style={{}} /*appearTransition*/ />
+									{HPEnemy}/20{enemyList?.["E00"+(currStage+1)]?.assignedYearSuffix}
+									<br />
+									ガードコマンド
+								</div>
+							</Modal>
+
+							{/* <Button onClick={ showModal("modal2") } style={{zIndex:"100", borderRadius:"30px", visibility:"hidden"}}>|  ||| |||| |||</Button> */}
+							
 							<Modal
 								style={{fontFamily:"PixelMPlus"}}
 								visible={stateModal.modal2}
@@ -1356,7 +1588,10 @@ const App = () => {
 							>
 								<div style={{ height: "100px", overflow: 'scroll' }}>
 									<br />
-									<Typewriter stopBlinkinOnComplete={true} string={mesBattle?.[enemyList?.["E00"+(currStage+1)]?.id]?.[currentHPBattleEvent]?.mes} delay={100} />
+									<Typewriter stopBlinkinOnComplete={true} string={mesBattle?.[enemyList?.["E00"+(currStage+1)]?.id]?.[currentHPBattleEvent]?.mes} delay=
+									{
+										`${(currStage == MAX_STAGE_COUNT-1) ? "50" : "100"}`
+									} />
 								</div>
 							</Modal>
 
@@ -1368,7 +1603,7 @@ const App = () => {
 								maskClosable={true}
 								onClose={onClose('modalStageClear')}
 								title={"空 想 切 除 - "+enemyList?.["E00"+(currStage)]?.iconicKanji}
-								footer={[{ text: '▼', onPress: () => {onClose('modalStageClear')() } }]}
+								footer={[{ text: '▼', onPress: () => {onClose('modalStageClear') } }]}
 								wrapProps={{ onTouchStart: onWrapTouchStart }}
 								afterClose={() => { 
 
@@ -1390,10 +1625,10 @@ const App = () => {
 								maskClosable={true}
 								onClose={onClose('modalTakedown')}
 								title={""}
-								footer={[{ text: '▼', onPress: () => { onClose('modalTakedown')() } }]}
+								footer={[{ text: '▼', onPress: () => { onClose('modalTakedown') } }]}
 								wrapProps={{ onTouchStart: onWrapTouchStart }}
-								afterClose={() => { 
-									showModal("modalStageClear")()
+								afterClose={(e) => { 
+									showModal("modalStageClear")(e)
 								 }}
 							>
 								<div style={{ height: "100px", overflow: 'hidden', fontSize:"50px", color:"black" }}>
@@ -1500,10 +1735,10 @@ const App = () => {
 
 
 				<ParallaxLayer offset={2+1+0.05} speed={0.1}  className={unTouchable} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', 
-					gap:20+15+"px", zIndex:"100" }}>
-					<img src={server1} className={touchable} style={{ width: '20%' 										}} onClick={ (e)=>{e.preventDefault; playSFXrobot01()}}  />
-					<img src={server2} className={touchable} style={{ position:"relative", width: 20+"%", top:50+"px"	}} onClick={ (e)=>{e.preventDefault; playSFXrobot02()}}  />
-					<img src={server3} className={touchable} style={{ width: '20%', top:30+"px"	 						}} onClick={ (e)=>{e.preventDefault; playSFXrobot06()}}  />
+ 					/*gap:20+15+"px", [FIXME] cannot be applied by iOS Safari... so I set margin below into the children */  zIndex:"100" }}>
+					<img src={server1} className={touchable} style={{ margin:"10px 10px", width: '20%' 										}} onClick={ (e)=>{e.preventDefault; playSFXrobot01()}}  />
+					<img src={server2} className={touchable} style={{ margin:"10px 10px", position:"relative", width: 20+"%", top:50+"px"	}} onClick={ (e)=>{e.preventDefault; playSFXrobot02()}}  />
+					<img src={server3} className={touchable} style={{ margin:"10px 10px", width: '20%', top:30+"px"	 						}} onClick={ (e)=>{e.preventDefault; playSFXrobot06()}}  />
 				</ParallaxLayer>
 
 				<ParallaxLayer offset={1+2+0.1} speed={0.8} className={unTouchable} style={{ opacity: "0.1" }}>
@@ -1533,7 +1768,8 @@ const App = () => {
 				</ParallaxLayer>
 
 
-				{ ( !(currStage==MAX_STAGE_COUNT-1) ) ?
+				{ (currStage<MAX_STAGE_COUNT-3)
+				?
 				<></>
 				:
 				<ParallaxLayer offset={3+1+0.01} speed={-0.3}  className={unTouchable}>
@@ -1556,6 +1792,9 @@ const App = () => {
 					<img onClick={ (e)=>{e.preventDefault; playSFXclick8()}} className={touchable}  
 					src={GameTown} 
 					style={{ transform: "translateX(-40%) translateY(-28%) scale(0.7)" }}/>
+					<img onClick={ (e)=>{e.preventDefault; playSFXduckS2()}} className={touchable}  
+					src={rat}
+					style={{ transform: "translateX(80%) translateY(-2828%) scale(0.2)", zIndex:100+1 }}/> {/*20, 2228*/}
 
 				</ParallaxLayer>	
 
