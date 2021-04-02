@@ -12,8 +12,6 @@ import nasaParticles from "./nasaParticles.json"
 import GlitchClip from 'react-glitch-effect/core/Clip'
 import GlitchText from 'react-glitch-effect/core/Text'
 
-import MobileDetect from 'mobile-detect'
-
 import { Typewriter } from 'react-typewriting-effect'
 import './typewriter.css'
 
@@ -29,7 +27,11 @@ import useScrollPosition from './useScrollPosition'
 import { RotateGradient } from './RotateGradient'
 import { AddHomeButton } from './AddHomeButton'
 
+// Fetcher
 import axios from 'axios';
+
+// Mobile Device Detector
+import MobileDetect from 'mobile-detect'
 
 //Components
 import "./Root.css"
@@ -58,6 +60,7 @@ import { ReactComponent as DinoDI } from "./diplodocus.svg"
 import { ReactComponent as DinoST } from "./stegosaurus_2.svg"
 
 import rat from "./Rat_62x30.png"
+import kyokoVideo from "./kyoko_2.mp4"
 
 /*
 import { ReactComponent as satellite4 } from "./satellite4.svg"
@@ -101,9 +104,9 @@ import { Parallax, ParallaxLayer } from 'react-spring/renderprops-addons'
 
 //Sounds
 import BGMOcean1 from './Ocean1.mp3';
-import BGMdetective from './Times Square 96.mp3';
-import BGMdv2 from './TD2Theme.mp3';
-import BGMending from './BUILT TO LAST  Official.mp3';
+import BGMdetective from './Times Square_2.mp3';
+import BGMdv2 from './TD2Theme_2.mp3';
+import BGMending from './BUILT TO LAST  Official_2_short_80.mp3';
 //import BGM from './.mp3';
 
 import SFXget2 from './Cash register 2.mp3'
@@ -153,12 +156,22 @@ import { get } from 'lodash-es'
 
 // Constants
 const PLAYABLE_MAX_WIDTH = 800-100
-const FIRST_BATTLE_HP = 9999//100
+const FIRST_BATTLE_HP = 100//100
 const FIRST_STAGE = 0 //2 to car
 
+const FIRST_CAMERA_POS = 2.5 //2 to car
+
 const MAX_STAGE_COUNT = 4　//5
-const MIN_DAMAGE_PARAM = 0
+const MIN_DAMAGE_PARAM =  1//[CAUTION][MEMO][HEURISTIC] 0 if zero, HP battle event sort (previous event registration got error)
 const BGM_COUNT = 4
+
+const FIRST_PLAYBACK_RATE = 1.0
+const FIRST_INVENTORY = {}
+
+// MAIN CAMERA FILTER
+const FIRST_FILTER_INVERT_PARAM = 0.0
+const FIRST_FILTER_SATURATE_PARAM = 1.3
+const FIRST_FILTER_BRIGHTNESS_PARAM = 1.0
 
 const FULL_HPBATTLE_EVENT_NUM = 100
 const ZERO_HPBATTLE_EVENT_NUM = 0
@@ -174,6 +187,7 @@ const App = () => {
 	const scrollPos = useScrollPosition();
 	const [themeColor, setThemeColor] = useState("#0000ff");
 
+	const [scrollYPos, setScrollYPos] = useState(window.scrollY)
 	// Device Pixel Implementation
 	// ------------------------------
 
@@ -191,15 +205,17 @@ const App = () => {
 
 	const [firstGlitch, setFirstGlitch] = useState(false)
 
-	const [isFirstMagicSpelling, setIsFirstMagicSpelling] = useState(false)
+	const [isFirstMagicSpelling, setIsFirstMagicSpelling] = useState(true)
 	const [isFirstMagicBreak, setIsFirstMagicBreak] = useState(false)
 
 	const [isGuard, setIsGuard] = useState(false)
 	const [guardCount, setGuardCount] = useState(false)
 	
-	const [inventory, setInventory] = useState(false)
+	const [inventory, setInventory] = useState(FIRST_INVENTORY)
 
-	
+	const [_invert_strength, setFilterInvertParam] = useState(FIRST_FILTER_INVERT_PARAM)
+	const [_saturate_strength, setFilterSaturateParam] = useState(FIRST_FILTER_SATURATE_PARAM)
+	const [_brightness_strength, setFilterBrightnessParam] = useState(FIRST_FILTER_BRIGHTNESS_PARAM)
 	// const [items, setItems] = useState([])
 	// const [sortedItems, setSortedItems] = useState([])
 	// const [isSortAscend, setIsSortAscend] = useState(true)
@@ -218,20 +234,29 @@ const App = () => {
 	
 
 
+	const [cameraPos, setCameraPos] = useState(FIRST_CAMERA_POS)
+
 	// Sound Implementation
 	// ------------------------------
 
 	const [isBGMPlaying, setBGMPlaying] = useState(false)
 
-	const [playbackRate ,setPlaybackRate] = useState(0.35) // 4.0 //0.35
+	const [playbackRate ,setPlaybackRate] = useState(FIRST_PLAYBACK_RATE) // 4.0 //0.35
+
+    const [volumeOcn1,	  	setVolumeOcn1	]  		= useState(0.5) // 4.0 //0.35
+    const [volumeDv2, 		setVolumeDv2	]     	= useState(1.0) // 4.0 //0.35
+    const [volumeDtv, 		setVolumeDtv	]     	= useState(0.6) // 4.0 //0.35
+    const [volumeEnding, 	setVolumeEnding	]		= useState(1.0) // 4.0 //0.35
+
+	const [volumeWeight,	setVolumeWeight	]  		= useState(0.0) // 4.0 //0.35
 
 	// [TIPS] ES6 Destructure import caught by : (it is not key:value, means a command framed key:(const variable) then import as variable=key )
 	// BGMs
 	// [FIXME] Expected useSound Manager that Combine BGMs Array and make const var dynamically	
-    const [playBGMOcn1,	 	{stop   : stopBGMOcn1} ] = useSound(BGMOcean1,		{ playbackRate, volume: 0.5, loop:true })
-    const [playBGMdv2, 		{stop    : stopBGMdv2} ] = useSound(BGMdv2,			{ playbackRate, volume: 1.0, loop:true })
-    const [playBGMDtv, 		{stop    : stopBGMDtv} ] = useSound(BGMdetective,	{ playbackRate, volume: 0.6, loop:true })
-    const [playBGMending, 	{stop : stopBGMending} ] = useSound(BGMending,		{ playbackRate, volume: 1.0, loop:true })
+    const [playBGMOcn1,	 	{stop   : stopBGMOcn1} ] = useSound(BGMOcean1,		{ playbackRate, volume: volumeOcn1+volumeWeight,	  	loop:true })
+    const [playBGMdv2, 		{stop    : stopBGMdv2} ] = useSound(BGMdv2,			{ playbackRate, volume: volumeDv2+volumeWeight, 		loop:true })
+    const [playBGMDtv, 		{stop    : stopBGMDtv} ] = useSound(BGMdetective,	{ playbackRate, volume: volumeDtv+volumeWeight, 		loop:true })
+    const [playBGMending, 	{stop : stopBGMending} ] = useSound(BGMending,		{ playbackRate, volume: volumeEnding+volumeWeight, 		loop:true })
 
 
 	//SFXs
@@ -242,18 +267,18 @@ const App = () => {
     const [playSFXduckS2, {stop     : stopSFXduckS2} ] = useSound(SFXduckS2)
     const [playSFXduckS5, {stop     : stopSFXduckS5} ] = useSound(SFXduckS5)
 
-	const [playSFXdog01, {stop     : stopSFXdog01} ] = useSound(SFXdog01)
-	const [playSFXdog02, {stop     : stopSFXdog02} ] = useSound(SFXdog02)
-	const [playSFXdog03, {stop     : stopSFXdog03} ] = useSound(SFXdog03)
-	const [playSFXdog04, {stop     : stopSFXdog04} ] = useSound(SFXdog04)
-	const [playSFXdog05, {stop     : stopSFXdog05} ] = useSound(SFXdog05)
+	const [playSFXdog01, {stop     : stopSFXdog01} ] = useSound(SFXdog01,		{ volume: 2.0})
+	const [playSFXdog02, {stop     : stopSFXdog02} ] = useSound(SFXdog02,		{ volume: 2.0})
+	const [playSFXdog03, {stop     : stopSFXdog03} ] = useSound(SFXdog03,		{ volume: 2.0})
+	const [playSFXdog04, {stop     : stopSFXdog04} ] = useSound(SFXdog04,		{ volume: 2.0})
+	const [playSFXdog05, {stop     : stopSFXdog05} ] = useSound(SFXdog05,		{ volume: 2.0})
 
 	const [playSFXcar01, {stop     : stopSFXcar01} ] = useSound(SFXcar01)
 	const [playSFXcar02, {stop     : stopSFXcar02} ] = useSound(SFXcar02)
 	const [playSFXcar03, {stop     : stopSFXcar03} ] = useSound(SFXcar03,{volume:0.3})
 	const [playSFXcar04, {stop     : stopSFXcar04} ] = useSound(SFXcar04)
 	const [playSFXcar05, {stop     : stopSFXcar05} ] = useSound(SFXcar05)
-	const [playSFXCarCrush, {stop     : stopSFXCarCrush} ] = useSound(SFXCarCrush)
+	const [playSFXCarCrush, {stop     : stopSFXCarCrush} ] = useSound(SFXCarCrush,		{ volume: 1.0-0.3}/* [MEMO] due to BGM pitch craziness event make feel certainly, isnormalize slightly */)
 
 	const [playSFXsand04, {stop     : stopSFXsand04} ] = useSound(SFXsand04)
 	const [playSFXfoot15, {stop     : stopSFXfoot15} ] = useSound(SFXfoot15)
@@ -281,16 +306,12 @@ const App = () => {
 	const [playSFXerror21, {stop     : stopSFXerror21} ] = useSound(SFXerror21)
 	const [playSFXerror14, {stop     : stopSFXerror14} ] = useSound(SFXerror14)
 
-	const stopAllBGMs = () => {
-		stopBGMOcn1()
-		stopBGMdv2()
-		stopBGMDtv()
-		stopBGMending()
-	}
 
 	// Master Data Parameters
 	// ------------------------------
 	const [currStage, setCurrStage] = useState(FIRST_STAGE)
+
+	const [canShowClearVideo, setCanShowClearVideo] = useState(false)
 
 	const [currBGMIndex, setCurrBGMIndex] = useState(0)
 
@@ -306,14 +327,33 @@ const App = () => {
 		{
 			"src": DuckGLB,
 			"ios-src":DuckUSDZ,
-			"camera-orbit":"45deg 55deg 2.5m",
-			"min-camera-orbit":'auto auto auto',
-			"rotation-per-second":"50deg"
+			"camera-orbit":	((currStage==1) 
+							? 	(
+								(  (Number(HPEnemy)) ) *36 + "deg "
+									+ ( (Number(HPEnemy)) ) *36 + "deg "   
+									+ ( Math.abs( Math.tan( (Number(HPEnemy)) * Math.PI ) ) * 3.0 ) + "m"   
+									// if minus it becomes default value (45deg?), unfortunately...
+								) 
+							:	"45deg 55deg 2.5m" 
+							),
+			"min-camera-orbit":'auto auto '+(0.5+2.0)+'m',
+			"max-camera-orbit":'auto auto '+10+'m',
+			"rotation-per-second": 	((currStage==1) 
+									? 	(
+										   ( ((Number(HPEnemy))%10 < 5) ? "-" : "" ) + 30 * ( (Number(HPEnemy))%10 + 1 ) +"deg"   
+										)
+									:	"30deg" 
+									)
 		},
+
+//			"camera-orbit":"45deg 55deg "+cameraPos+"m",
+//			"min-camera-orbit":'auto auto auto',
+//			"rotation-per-second":"50deg"
+//		},
 		{
 			"src": FoxGLB,
 			"ios-src":FoxUSDZ,
-			"camera-orbit":'5.14rad 1.03rad 200m',
+			"camera-orbit":"5.14rad 1.03rad"+200+cameraPos+"m",
 			"min-camera-orbit":'auto auto 2m',
 			"rotation-per-second":"50deg"
 
@@ -321,7 +361,7 @@ const App = () => {
 		{
 			"src": ToycarGLB,
 			"ios-src":ToycarUSDZ,
-			"camera-orbit":"45deg 55deg 2.5m",
+			"camera-orbit":"45deg 55deg "+cameraPos+"m",
 			"min-camera-orbit":'auto auto auto',
 			"rotation-per-second":"50deg"
 		},
@@ -355,44 +395,48 @@ const App = () => {
 				"id":"duck001",
 				"name":"アヒルちゃん",
 				"iconicKanji":"酉",
-				"assignedYearSuffix":"17",
+				"assignedYearSuffix":"45",
 				"HP":100,
 				"DEF":0,
-				"GuardThreshold":10,
+				"GuardThreshold":80,
 				"DmgSnd":playSFXduck7,
+				"GuardSnd":playSFXerror21,
 		}
 		,
 		"E002" : {
 				"id":"dog001",
-				"name":"ゴッド・ドッグ",
+				"name":"神社前の犬",
 				"iconicKanji":"戌",
-				"assignedYearSuffix":"18",
+				"assignedYearSuffix":"46",
 				"HP":100,
 				"DEF":0,
 				"GuardThreshold":10,
 				"DmgSnd":playSFXdog01,
+				"GuardSnd":playSFXerror21,
 		}
 		,
 		"E003" : {
 				"id":"boar001",
-				"name":"十二支会 - 猪組直系 特攻隊 若頭",
+				"name":"試作兵器 特攻部隊隊長",
 				"iconicKanji":"亥",
-				"assignedYearSuffix":"19",
+				"assignedYearSuffix":"47",
 				"HP":100,
 				"DEF":0,
 				"GuardThreshold":10,				
 				"DmgSnd":playSFXcar03,
+				"GuardSnd":playSFXerror21,
 		}
 		,
 		"E004" : {
 				"id":"rat001",
-				"name":"FROM : 明日葉 京子 2020/12/32",
-				"iconicKanji":"0505",
-				"assignedYearSuffix":"20",
+				"name":"FROM : RENA 1983/=薙/^¥繧?",
+				"iconicKanji":"0401",
+				"assignedYearSuffix":"83",
 				"HP":9999,
 				"DEF":0,
 				"GuardThreshold":10,				
 				"DmgSnd":playSFXerror21,
+				"GuardSnd":playSFXerror21,
 		}
 		,
 		"E005" : {
@@ -404,6 +448,7 @@ const App = () => {
 				"DEF":9999,
 				"GuardThreshold":10,				
 				"DmgSnd":playSFXerror21,
+				"GuardSnd":playSFXerror21,
 		}
 		,						
 	}
@@ -415,6 +460,10 @@ const App = () => {
 				mes:"え？ なんやねん………？",
 				snd:playSFXduckS2
 			},
+			"80":{
+				mes:"ぐああ………！！！",
+				snd:playSFXduckS2
+			},			
 			"60":{
 				mes:"ちょ…イタイやないかい！",
 				snd:playSFXduckS5
@@ -427,10 +476,10 @@ const App = () => {
 				mes:"…… ……！！！",
 				snd:playSFXduckS2
 			},
-			"10":{
-				mes:"(なぜか攻撃が通用しない…。) (街で武器を探すべきかもしれない…………。)",
-				snd:playSFXGuard
-			},
+	///[TEMPORARY]///		"10":{
+	///[TEMPORARY]///			mes:"(なぜか攻撃が通用しない…。) (街で武器を探すべきかもしれない…………。)",
+	///[TEMPORARY]///			snd:playSFXGuard
+	///[TEMPORARY]///		},
 		},
 		"dog001" : {
 			"90":{
@@ -449,10 +498,10 @@ const App = () => {
 				mes:"ワオ―――ン！！！！！！！",
 				snd:playSFXdog05
 			},
-			"10":{
-				mes:"(なぜか攻撃が通用しない…。) (街で武器を探すべきかもしれない…………。)",
-				snd:playSFXGuard
-			},
+	///[TEMPORARY]///		"10":{
+///[TEMPORARY]///				mes:"(なぜか攻撃が通用しない…。) (街で武器を探すべきかもしれない…………。)",
+///[TEMPORARY]///				snd:playSFXGuard
+///[TEMPORARY]///			},
 		},
 		"boar001" : {
 			"90":{
@@ -467,29 +516,45 @@ const App = () => {
 				mes:"どこ見てるんや われぇ！！！",
 				snd:playSFXcar03
 			},
-			"60":{
+			"63":{
 				mes:"( 車は車道を強く横転した……… )",
 				snd:playSFXCarCrush
 			},
-			"50":{
+			"54":{
 				mes:"( 炎と煙が上がっている…。 )",
 				snd:null
 			},
-
-			"50":{
-				mes:"( 車は車道を強く横転した。炎と煙が上がっていて、血だまりのような物が出来ている………… )",
+			"48":{
+				mes:"( 車体の中から、ずるりずるりと、全身が炎で包まれた何かが這い出てきた……。自分は、助けるべきだろうか…………？ )",
 				snd:playSFXcar04
 			},
 			"40":{
-				mes:"( 車は車道を強く横転した。炎と煙が上がっていて、血だまりのような物が出来ている………… )",
+				mes:"( 這い出てきた何かは動かなくなった…。顔はただれ、黒く焦げている。人間だとは思うが、もう性別が判別できない………。ステーキ肉が焼けたときのような重たい油の匂いが立ち込めてくるが、ひどい異臭だ……………。 )",
 				snd:playSFXcar04
 			},
-			"10":{
-				mes:"(なぜか攻撃が通用しない…。) (街で武器を探すべきかもしれない…………。)",
-				snd:playSFXGuard
+			///[TEMPORARY]///"10":{
+			///[TEMPORARY]///	mes:"(なぜか攻撃が通用しない…。) (街で武器を探すべきかもしれない…………。)",
+			///[TEMPORARY]///	snd:playSFXGuard
+			///[TEMPORARY]///},
+			"35":{
+				mes:"炎の煙と、焼けた肉の放つ死臭がひどい。)",
+				snd:playSFXscan03
 			},
-			"0":{
-				mes:"返事がない。(事切れている…。)",
+			"27":{
+				mes:"g9^i3tqi@regi@hjijjt93¥q9j9[aegjj90reii0348^985@390459uj3481¥jtgj¥932uvj1v905^3v2[9j34tij48^v@chir42hi8jc-91@:kqr0i329u1[2vj3jt4vi@qjt90253j¥9vh 234@83v h^8h8e9hvt8@ 4vhq[",
+				snd:playSFXscan03
+			},
+			"20":{
+				mes:"窶 譁?ｭ怜喧縺代＠縺滓枚遶?繧偵ヵ繧ｩ繝ｼ繝?蜀?↓雋ｼ繧贋ｻ倥￠縺ｦ縲後?縺代ｉ縺｣縺溘??√?阪?繝懊ち繝ｳ繧呈款縺吶□縺代〒縲∵枚蟄励?隗｣隱ｭ繧偵＠縺ｦ縺上ｌ縺ｾ縺吶? 繧ｿ繝悶?蛻?ｊ譖ｿ縺医〒譁?ｭ励さ繝ｼ繝峨′螟画峩蜿ｯ閭ｽ縺ｧ縲∵ｧ倥??↑譁ｹ豕輔〒螟画鋤繧定ｩｦ縺吶％縺ｨ縺後〒縺阪∪縺吶?り牡縲?↑譁?ｭ励さ繝ｼ繝峨ｒ",
+				snd:playSFXscan03
+			},
+			"10":{
+				mes:"遯ｶ 隴??ｭ諤懷密邵ｺ莉｣??邵ｺ貊捺椢驕ｶ?郢ｧ蛛ｵ繝ｵ郢ｧ?ｩ郢晢ｽｼ郢?陷??竊馴寞?ｼ郢ｧ雍具ｽｻ蛟･??邵ｺ?ｦ邵ｲ蠕?邵ｺ莉｣?臥ｸｺ?｣邵ｺ貅??竏?髦ｪ?郢晄㈱縺｡郢晢ｽｳ郢ｧ蜻域ｬｾ邵ｺ蜷ｶ笆｡邵ｺ莉｣縲堤ｸｲ竏ｵ譫夊氛蜉ｱ?髫暦ｽ｣髫ｱ?ｭ郢ｧ蛛ｵ??邵ｺ?ｦ邵ｺ荳奇ｽ檎ｸｺ?ｾ邵ｺ蜷ｶ? 郢ｧ?ｿ郢晄じ?陋ｻ??願ｭ厄ｽｿ邵ｺ蛹ｻ縲定ｭ??ｭ蜉ｱ縺慕ｹ晢ｽｼ郢晏ｳｨ窶ｲ陞溽判蟲ｩ陷ｿ?ｯ髢ｭ?ｽ邵ｺ?ｧ邵ｲ竏ｵ?ｧ蛟･??竊題ｭ?ｽｹ雎戊ｼ斐?定棔逕ｻ驪､郢ｧ螳夲ｽｩ?ｦ邵ｺ蜷ｶ??ｸｺ?ｨ邵ｺ蠕後?堤ｸｺ髦ｪ竏ｪ邵ｺ蜷ｶ?繧顔横邵ｲ?竊題ｭ??ｭ蜉ｱ縺慕ｹ晢ｽｼ郢晏ｳｨ?",
+				snd:playSFXscan03
+			},
+
+			"5":{
+				mes:"遯?? 隴????諤懷??????莉｣??邵??貊捺椢驕ｶ?郢??蛛ｵ繝ｵ郢?????郢晢????郢?陷??竊馴????郢??雍??????蛟･??邵?????邵????邵??莉｣?臥???????邵???????髦???郢????縺??郢晢????郢??蜻域ｬ??邵??蜷??????邵??莉｣縲堤????竏ｵ譫夊氛蜉???髫暦????髫?????郢??蛛ｵ??邵?????邵??荳????檎ｸ?????邵??蜷??? 郢?????郢",
 				snd:playSFXscan03
 			}
 		},
@@ -507,7 +572,7 @@ const App = () => {
 				snd:playSFXscan03
 			},
 			"9970":{
-				mes:"「私たちに感情なんてないと思ってた？………………それは勘違い。私たちにも、感情や意思もあるし、痛覚もある。ちゃんと痛みは感じるし、そうやってキミが殴って、たたく度、呼吸が詰まるくらいに苦しんで、動けないくらい、キチンと痛がってる。………………その証拠を、見せてあげられたら、いいんだけれど。…………………。　　なんて。　　　ごめんね、冗談。　　　ビックリしたかな？」",
+				mes:"「私たちに感情なんてないと思ってた？………………それは勘違い。私たちにも、感情や意思もあるし、痛覚もある。ちゃんと痛みは感じるし、そうやってキミが殴って、たたく度、呼吸が詰まるくらいに苦しんで、動けないくらい、キチンと痛がってる。………………その証拠を、見せてあげられたら、いいんだけれど。…………………。 　ビックリしたかな？」",
 				snd:playSFXscan03
 			},
 			"9960":{
@@ -535,11 +600,11 @@ const App = () => {
 				snd:playSFXscan03
 			},
 			"9900":{
-				mes:"「この間まで2019年………令和元年だったのに…はやいものね。思っちゃうの。そもそも、2020年すらも、来なければ良かったのにって。でも、2020年は最初は悪くない年だったわよね。キリが良い数字だったから、なにか新しい事をやるには丁度良い年だったし、覚えやすくて、なんだか縁起も良い気がしたわ。それにあの頃のお正月は、まだ何も世間に問題なんて起きてなくて、ホントに平和だった。」",
+				mes:"「この間まで1945年………戦争の最中だったのに…はやいものね。思っちゃうの。今だって、平和なんてそもそも無くて、悪化し続けてるって。それなら、2020年すらも、来なければ良かった。でも、2020年は最初は悪くない年だったわよね。キリが良い数で、なんだか縁起も良い気がして。あの頃のお正月は、まだ全てが起きる前だった。」",
 				snd:playSFXscan03
 			},
 			"9890":{
-				mes:"「それに、お正月のコタツはいつも気持ち良いし。ささやかな幸せでいいから、永遠にああいう穏やかな時間が続けば良いのにって、そう思わない？………そういう些細な幸せだけで、私たちは十分なのに、月日が経つごとに、どんどん物事って、なにごとも悪化しちゃう。「2020年の春」があんなに地獄になるなんて、誰が想像できたかしら？《読めない物事》って、本当に怖いよね。……………時間の流れってものが、たまに、ものすごく嫌いになるの。」",
+				mes:"「ささやかな幸せでいいから、永遠に穏やかな時間が続けば良いのにって、そう思わない？………そういう些細な幸せだけで、私たちは十分なのに、月日が経つごとに、どんどん物事って、なにごとも悪化しちゃう。「2020年の春」があんなに地獄になるなんて、誰が想像できたかしら？《読めない物事》って、本当に怖いよね。……………時間の流れってものが、たまに、ものすごく嫌いになるの。」",
 				snd:playSFXscan03
 			},
 			"9880":{
@@ -547,7 +612,7 @@ const App = () => {
 				snd:playSFXscan03
 			},
 			"9870":{
-				mes:"「そう、そういえば、プログラムを書き換えて、私の本体をあの場所に隠していなかったら、今頃、私もあなたに倒されて、あなたと話せる時間も終わっていたと思うの。幸せな時間って、長続きしないから。私が2020年より先を受け入れないのも、それに近いかもしれないわね。幸せな時間は、努力しないと維持できない。デフォルトで用意されてる未来は、不幸だけなのよ。そういうものだって私は思う。」",
+				mes:"「そう、そういえば、プログラムを書き換えて、私の本体をあの場所に隠していなかったら、今頃、私の出番は終わって、あなたと話せる時間もなかったと思うの。幸せな時間って、長続きしないから。私が2020年より先を受け入れないのも、それに近いかもしれないわね。幸せな時間は、努力しないと維持できない。デフォルトで用意されてる未来は、不幸だけなのよ。そういうものだって私は思う。」",
 				snd:playSFXscan03
 			},
 			"9860":{
@@ -555,11 +620,11 @@ const App = () => {
 				snd:playSFXscan03
 			},
 			"9850":{
-				mes:"「ね？そういうコトだからさ。……ちょっと考え方を変えて、もう少し、楽に生きてみない？………それが一番言いたかったの。もう、2021年なんてこなかった。…そういうコトにしない…？………幸せな時間は終わらなかった。不幸なんてなかった。誰も死ななかった。誰も、死ななかった。………全部さ。そういうことにしようよ。………苦しいこと、ツライことなんて、手放しちゃえばいい。……たまには逃げても、手放しても、いいんだから。」",
+				mes:"「ね？そういうコトだからさ。……ちょっと考え方を変えて、もう少し、楽に生きてみない？………それが一番言いたかったの。もう、2021年なんてなかった。…そうしない…？………不幸はなかった。人は沢山死ななかった。誰も死ななかった。誰も死ななかった。………全部さ。そうしようよ。………苦しいこと、ツライことなんて。手放しちゃえばいい。」",
 				snd:playSFXscan03
 			},
 			"9840":{
-				mes:"「全部を、なかったことにして…………。嫌なことや不幸な現実なんか…………なかったコトにして。逃げることは、決して、悪いことなんかじゃない。………………。・・・・・・・・。……………………。……………。………………ね？」",
+				mes:"「全部を、なかったことにしない……？嫌なことや、現実なんか…………なかったコトにして。逃げよう………？・・・・・・・・。……………………。……………。………………ね？」",
 				snd:playSFXscan03
 			},
 			"9830":{
@@ -583,14 +648,32 @@ const App = () => {
 	}
 
 	const player = {
-		"ATK":5,
+		//"ATK":10,
+		"ATK":1,
+	}
+
+
+	// *** Fixtures
+	// ------------------------------
+
+	// SLEEP for Animations
+	const sleep = (delay) => new Promise ( (resolve)=> setTimeout(resolve,delay) )
+
+
+	const stopAllBGMs = () => {
+		stopBGMOcn1()
+		stopBGMdv2()
+		stopBGMDtv()
+		stopBGMending()
 	}
 
 	const toggleBGM = () => {
 		setToggleFadeMusicButton(!stateToggleFadeMusicButton)
 		// [TIPS」 using redundant way to protect BGM ON/OFF integrity whether the button's view broken or not by being isolated
 		if (isBGMPlaying == true) {
-			setBGMPlaying(false)
+			if(currStage < MAX_STAGE_COUNT-1) setBGMPlaying(false)///[TEMPORARY COMMENT OUT]/////setBGMPlaying(false)
+			
+			
 		}
 		else if (isBGMPlaying == false) {
 
@@ -609,19 +692,32 @@ const App = () => {
 
 	}
 
+
 	// *** UseEffect
 	// ------------------------------
+	
 	useEffect(
 		() => { 	
 			const handleResize = () => setScreenSize({width : window.innerWidth, height : window.innerHeight })
 			window.addEventListener("resize", handleResize)
 			console.log(screenSize)
-			console.log("scroll:"+scrollPos+" "+window.pageYOffset)
 
 			return () => window.removeEventListener("resize", handleResize);
 			
 	},[])
 
+	useEffect(
+	()=>{
+		const handleScroll = () => {}
+		window.addEventListener("scroll", handleScroll)
+		console.log("scroll:"+scrollPos+" window.scrollY"+window.scrollY)
+		setScrollYPos(window.scrollY)
+
+		return ()=> 	window.removeEventListener("scroll", handleScroll)
+	},[scrollYPos])
+
+
+	//BGM Switcher from Toggle Button
 	useEffect(
 		() => {
 			//	const [playCurrBGM, {stop : stopCurrBGM} ] = useSound(BGMs[currBGMIndex])
@@ -642,6 +738,13 @@ const App = () => {
 			else stopAllBGMs()
 
 	},[isBGMPlaying])
+
+	//BGM playbackRate changer from if any battle event invoked
+	useEffect(
+		()=>{
+
+		}
+	,[playbackRate])
 
 	useEffect(
 		() => {
@@ -726,6 +829,7 @@ const App = () => {
 		}
 		getData()
 		
+		/* [FIXME] it is Access-Control-Cross-Origin from package.json of proxy:"localhost:3000" to prevent CORS no-permission problem
 		const getIPFromAmazon = async () => {
 			try {
 				const res = await axios.get("https://checkip.amazonaws.com/")
@@ -735,6 +839,7 @@ const App = () => {
 			}
 		}  
 		getIPFromAmazon()
+		*/
 
 	},[])
 
@@ -747,7 +852,7 @@ const App = () => {
 		return () => window.removeEventListener("DOMContentLoaded", handler);
 	},[])
 
-	// CUSTOM APP INSTALL NOTIFER
+	// CUSTOM APP INSTALL NOTIFIER
 	/*
 	useEffect( ()=>{
 		let deferredPrompt;
@@ -765,40 +870,45 @@ const App = () => {
 	
 
 	// ENEMY BATTLE LOGIC
-	useEffect(
-		async ()=>{
+	const logicBattle = async ( { event } ) => {
+
+		// PLAY DAMAGE SOUND
+		if( isGuard==false ) {
+			enemyList?.["E00"+(currStage+1)]?.DmgSnd()
+		} else if 
+		( isGuard==true ) {
+			enemyList?.["E00"+(currStage+1)]?.GuardSnd()
+		}
+		console.log("scroll:"+scrollPos+" window.scrollY:"+window.scrollY)
+
+		// MOVIE DIALOG MANAGER PARAMS (DURING BATTLE)
+		let flgHPBattleEvent=null
+		let flgMagicEvent=null
+
+		//BATTLE LOGIC - ATTACK
+		if(HPEnemy > 0) { 
+
+			// PLAYER ATTACK
+			// ------------------------------
+			let damageParam = player.ATK + parseInt(Math.random()*10/*///[TEMPORARY COMMENT OUT]///Math.random()*10*/) -5 - enemyList?.["E00"+(currStage+1)]?.DEF
 			
-			// IF IS ENEMY DEAD MANAGER
-			if (HPEnemy <= 0) {
-				// GO TO NEXT STAGE FUNCTION
-				if (currStage<(MAX_STAGE_COUNT-1)) { 
-					await setCurrStage((currStage=>(currStage+1))); 
-					await showModal("modalTakedown")()
+			console.log( "STAGE:" + currStage + " " + " DAMAGE:" + damageParam + " HP:" + HPEnemy )
+			if (damageParam <=0 || isGuard == true) { damageParam = MIN_DAMAGE_PARAM }
 
-					//await showModal("modalStageClear")()
-					//[CAUTION] currStage needs to add 2 because JSON enemyList key_String starts by E001 not E000
-					console.log("E00"+(currStage+1)+" "+enemyList?.["E00"+(currStage+1+1)]?.HP)
-					await setHPEnemy(enemyList?.["E00"+(currStage+1+1)]?.HP)
-				}
-			}
+			await setHPEnemy(HPEnemy-damageParam)
 
-			// MOVIE DIALOG MANAGER (DURING BATTLE)
-			let flgHPBattleEvent=null
-			let flgMagicEvent=null
-			
-
-
+			// GO NEXT STAGE : CHECK WHAT NEXT ENEMY TELLING & WOULD TURN ON
+			// ------------------------------
 			let pointerPrev = null
 			let pointerCurrent = null 
-
+	
 			let isFirstLoop=null
 			let _storePointer=null
-			//let _pointerNext = null 
-
+	
 			for ( const property in mesBattle?.[enemyList?.["E00"+(currStage+1)]?.id] ) {
 				//[FIXME][HEURISTIC] DUE TO THE POINTER OF property starts from MIN VALUE, NOT THE ORDER OF JSON DECLARATION, SO I DID THIS...
 				pointerCurrent = Number(property)
-
+	
 				if ( isFirstLoop==null ) { 
 					isFirstLoop = true
 					_storePointer = pointerCurrent
@@ -812,8 +922,9 @@ const App = () => {
 					_storePointer = pointerCurrent
 				}
 				//console.log("prev"+pointerPrev+" HP"+HPEnemy+" curr"+pointerCurrent)
-
+	
 				//e.g.  90  < HP < 80
+				// [FIXME] ↓ this has an error so if the damage is not zero twice, this is pass-through 
 				if ( pointerPrev <= HPEnemy && HPEnemy <= pointerCurrent ) { 
 					// TRIGGER DIALOG
 					if ( lastHPBattleEvent!=pointerCurrent ) { 
@@ -824,79 +935,116 @@ const App = () => {
 					}
 				}
 			}
+
+			// Music Pitch Change Event Interceptor
+			// Clamp number between two values with the following line:
+			const min = 7.3;
+			const max = 1.0;
+			const clamp = (_num, _min, _max) => Math.min(Math.max(_num, _min), _max);
+			console.log("playbackRate:" + 5.0 *  1.0 / ( 1.0 -  ( HPEnemy / enemyList?.["E00"+(currStage+1+1)]?.HP ) )+1 )
+			//hell bgm
+			//[FIXME][MEMO] toggle BGM function manually override
+			if(currStage == MAX_STAGE_COUNT-1-1 && HPEnemy <= 20+20 ) {
+				setPlaybackRate( //  1 / (1-(MAX/x=normX)) +1 <- by adding +1 can move pivot right then soften smoothness between 0 to 1 in x axis	
+					5.0 * 1.0 / ( 1.0 -  ( HPEnemy / enemyList?.["E00"+(currStage+1+1)]?.HP ) )+1 
+				)
+			}
+
 			
-			//console.log(property+" "+HPEnemy+" "+!!_HPBattleEvent+" "+!_HPBattleEvent )
 			
 
-			// // MOVIE DIALOG MANAGER
-			// let _HPBattleEvent = null
-			// for ( const property in mesBattle?.[enemyList?.["E00"+(currStage+1)]?.id] ) {
-			// 	if (Number(property) == HPEnemy) _HPBattleEvent = property
-			// 	//console.log(property+" "+HPEnemy+" "+!!_HPBattleEvent+" "+!_HPBattleEvent )
-			// }
-			
-
-			if ( ( HPEnemy <= enemyList?.["E00"+(currStage+1)]?.GuardThreshold ) && isGuard == false ) { 
-				flgMagicEvent = true
-				setIsGuard(true)
-			 }
-
-			// [TIPS][CAUTION][HEURISTIC][FIXME] At First Load,AttackableArea is missing somehow, so it needs to optional chaining and avoid addEventListener
-	
-			// Display Modal of Battle
+			// ENEMY ENEMY TALKING
+			// ------------------------------
 			if (flgHPBattleEvent) {
-
 				// Player's Attack Voice
 				if(currStage < MAX_STAGE_COUNT-1) 	{ playSFXYellAndATK()		}
 				else 								{ playSFXerror25()			}
-
-				const AttackableArea = window.document.querySelector("#AttackableArea")
-				const _event = new CustomEvent("modalMessageEnemy",{bubbles:true})	
-				//console.log("EVENT HP LISTER ACTIVATE")
-				await AttackableArea?.addEventListener("modalMessageEnemy", e=>{ showModal("modalMessageEnemy")({targetEvent:e}) })
-				await AttackableArea?.dispatchEvent(_event) // the argue must be Event Type Callback , be not Event Type Name
-			
-
+				showModal("modalParamsEnemy")({targetEvent:event})
 			}
+
+			//  SPELL GUARD IS ON
+			if ( ( HPEnemy <= enemyList?.["E00"+(currStage+1)]?.GuardThreshold ) && isGuard == false ) { 
+				///[TEMPORARY COMMENT OUT]///flgMagicEvent = true
+				///[TEMPORARY COMMENT OUT]///setIsGuard(true)
+			}
+
+			// ENEMY MAGIC SPELL
+			// ------------------------------
+			console.log("flgMagicEvent:"+flgMagicEvent+ " " + "isFirstMagicSpelling:"+ isFirstMagicSpelling)
 			
 			if (flgMagicEvent && isFirstMagicSpelling) {
-				playSFXGuard()
-			
-				const AttackableArea = window.document.querySelector("#AttackableArea")
-				const _event = new CustomEvent("modalMagicGuard",{bubbles:true})	
-				//console.log("EVENT HP LISTER ACTIVATE")
-				await AttackableArea?.addEventListener("modalMagicGuard", e=>{ showModal("modalMagicGuard")({targetEvent:e}) })
-				await AttackableArea?.dispatchEvent(_event) // the argue must be Event Type Callback , be not Event Type Name
-
-				setIsFirstMagicSpelling(false)
+				///[TEMPORARY COMMENT OUT]///playSFXGuard()
+				///[TEMPORARY COMMENT OUT]///showModal("modalMagicGuard")({targetEvent:event})
+				///[TEMPORARY COMMENT OUT]///setIsFirstMagicSpelling(false)
 			}
 
-			
-
-			// Resistration of On Destroy Event 
-			return () => {
-				window?.removeEventListener("modalMessageEnemy"		, e=>{ showModal("modalMessageEnemy"	)()		 })
-				window?.removeEventListener("modalMagicGuard"		, e=>{ showModal("modalMagicGuard"		)()		 })
-
-			}
-			//console.log("HP ENEMY:"+HPEnemy);
-
-			
-	},[HPEnemy])
-
-	const logicBattle = async () => {
-
-		//BATTLE LOGIC - ATTACK
-		if(HPEnemy>0) { 
-			let damageParam = player.ATK + parseInt(Math.random()*10) -5 - enemyList?.["E00"+(currStage+1)]?.DEF
-			console.log("stage:"+currStage +" "+  damageParam)
-			if (damageParam <=0 || phaseGuard== true) { damageParam = MIN_DAMAGE_PARAM }
-
-			await setHPEnemy(HPEnemy-damageParam)
 		} 
-		enemyList?.["E00"+(currStage+1)]?.DmgSnd()
 
-		
+
+		// BATTLE LOGIC - ENEMY DEATH
+		if (HPEnemy <= 0) {
+
+			// ENEMY DEATH
+			// ------------------------------
+
+			if (currStage<(MAX_STAGE_COUNT-1)) { 
+				// GO TO NEXT STAGE
+				await setCurrStage(currStage=>(currStage+1))
+
+				// TAKEDOWN DIALOG
+				await showModal("modalTakedown")()
+
+				//[CAUTION] currStage needs to add 2 because JSON enemyList key_String starts by E001 not E000
+				console.log("E00"+(currStage+1)+" "+enemyList?.["E00"+(currStage+1+1)]?.HP)
+			
+				// SET NEW ENEMY HP etc...
+				await setHPEnemy(enemyList?.["E00"+(currStage+1+1)]?.HP)
+				await setIsFirstMagicSpelling(true)
+
+				///[TEMPORARY]/// change camera filter
+ 				//[FIXME] Hell Mode each changes should changed at other blocks but , this time did at this all, because of due of finish
+				 if(currStage== MAX_STAGE_COUNT-1-1-1) {
+					setFilterBrightnessParam(1.5)
+					setFilterSaturateParam(0.5)
+
+					//[FIXME][MEMO] toggle BGM function manually override
+					//setVolumeWeight(2.0)
+					console.log(_invert_strength)
+				}
+
+				///[TEMPORARY]/// change camera filter
+ 				//[FIXME] Hell Mode each changes should changed at other blocks but , this time did at this all, because of due of finish
+				if(currStage== MAX_STAGE_COUNT-1-1) {
+					stopSFXCarCrush()
+					//set Filter
+					//setStateToggleHellMode(true)
+					setFilterInvertParam(1.0)
+					setFilterSaturateParam(0.0)
+					
+
+					//hell bgm
+					//[FIXME][MEMO] toggle BGM function manually override
+					setPlaybackRate(0.3)
+					setVolumeEnding(5.0)
+					setVolumeWeight(30.0)
+
+					stopAllBGMs()
+					setCurrBGMIndex(1)
+					setBGMPlaying(true)
+					setToggleFadeMusicButton(false)
+					
+					playBGMending()
+
+
+					console.log("LAST STAGE IN")
+					console.log(_invert_strength)
+				}
+
+			}
+		}
+
+
+			
 
 	}
 
@@ -1036,16 +1184,30 @@ const App = () => {
 	`
 
 	const _flash= null
-	const _invert_strength = 0.7+0.2
-	const _blur_strength = 2+"px"
-	const _grayscale_strength = 1.0
-	const _brightness_strength = 0.3
+   ///[WHERE THIS DEFINES WAS MOVED AT R215] ///const _invert_strength     = filterInvertParam 	///[TEMPORARY]///0.7+0.2
+    const _blur_strength       = 1.0-0.15+"px"	///[TEMPORARY]///2+"px"
+    const _grayscale_strength  = 0			///[TEMPORARY]///1.0
+   ///[WHERE THIS DEFINES WAS MOVED AT R217] ///const _brightness_strength = 1.1-0.1		///[TEMPORARY]///0.3
+    const _hue_strength        = 0+"deg"	///[TEMPORARY]///0.3
+    const _sepia_strength      = 0.35		///[TEMPORARY]///0.3
+    ///[WHERE THIS DEFINES WAS MOVED AT R217] ///const _saturate_strength   = 1.3		///[TEMPORARY]///1.0
+	const _contrast_strength   = 1.3		///[TEMPORARY]///1.0
+
 	const backdropFilterHell1 = css`
-		backdrop-filter: invert(${_invert_strength}) blur(${_blur_strength}) grayscale(${_grayscale_strength}) brightness(${_brightness_strength});
+		backdrop-filter: 
+			contrast(${_contrast_strength}) 
+			invert(${_invert_strength}) 
+			blur(${_blur_strength}) 
+			grayscale(${_grayscale_strength}) 
+			brightness(${_brightness_strength}) 
+			hue-rotate(${_hue_strength}) 
+			sepia(${_sepia_strength}) 
+			saturate(${_saturate_strength});
 	`
 	const _movie_brightness_strength = 0.0
 	const backdropFilterMovie1 = css`
-	backdrop-filter: brightness(${_brightness_strength});
+	backdrop-filter: 
+		brightness(${_brightness_strength});
 	`
 
 	const ButtonFillAnimation = css`
@@ -1130,8 +1292,8 @@ const App = () => {
 	const [ tmpText , setTmpText ] = useState("")
 
 	let _textModal = ""
+
 	//TypeWriter
-	const sleep = (delay) => new Promise ( (resolve)=> setTimeout(resolve,delay) )
 
 	const triggerTypeWriter = async ({text}) => {
 		const sleepNormal = 80
@@ -1181,9 +1343,8 @@ const App = () => {
 			modalTutorial: false,
 			modalStageClear: false,
 			modalTakedown: false,
-			modalMessageEnemy: false,
-			modal2: false,
-			modal3: false,
+			modalParamsEnemy: false,
+			modalEnemyTalking: false,
 			modalMagicGuard: false,
 			modalTips: false,
 			modalUseItem :false,
@@ -1191,13 +1352,15 @@ const App = () => {
 		}
 	)
 
+	const [ modalChainer,setModalChainer ] = useState({})
+
 	const showModal = key => (options) => { 
-		//[FIXME][MEMO]_e?.preventDefault()
+		//[FIXME][MEMO]
 		// I dont get learned to get arguement with object literal or destructure, should catch up later and fix it
-		options?.targetEvent?.preventDefault(); // Fix click penetration on Android */ 
+		options?.targetEvent?.preventDefault() // Fix click penetration on Android */ 
 		setStateModal({ [key]: true })
 		
-		//triggerTypeWriter({text:"なんでこんなことに・・・・TEXTTEXTTEXTTEXT"})
+		//triggerTypeWriter({text:"TEXTTEXTTEXTTEXT"})
 		//OnShowing 
 		if (key=="modalStageClear") { playSFXLevelUp(); console.log(key) }
 		if (key=="modalTakedown") { playSFXtakedown00(); console.log(key) }
@@ -1207,12 +1370,13 @@ const App = () => {
 
 	const onWrapTouchStart = (e) => {
 		// fix touch to scroll  backgrounded page on iOS
-		if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) { return; }
+		//if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) { return; }
 
 		// fix modal problem in each platform *CAUTION : need to target selector at 2nd argument
-		const pNode = closest(e.target, '.am-modal-content');
-
-		if (!pNode) { e.preventDefault(); }
+		//const pNode = closest(e.target, '.am-modal-content');
+		//if (!pNode) { e?.preventDefault() }
+		if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) { return; }
+		else { e?.preventDefault() }
 	}
 
 
@@ -1226,7 +1390,13 @@ const App = () => {
 		config: { duration: 400 } 
 	})
 
-	
+	const [stateToggleHellMode, setStateToggleHellMode] = useState(false)
+	const { applyHellFilter } = useSpring({ 
+		applyHellFilter: stateToggleHellMode ? 1 : 0,  // Subscriber : if state changes, this envoke fadeAnimation(with interpolation and rythm) to target component of style.
+		from: { applyHellFilter: 0 }, 
+		config: { duration: 3000 } 
+	})
+
 	//console.log(stageParams[currStage])
 	//console.log(yearParams[currStage])
 
@@ -1263,6 +1433,7 @@ const App = () => {
 		<div className={RootDesign}>	
 
 			<Helmet>
+
 				<script
 					type="module"
 					src="https://unpkg.com/@google/model-viewer@1.2/dist/model-viewer.min.js"
@@ -1275,7 +1446,18 @@ const App = () => {
 			
 			</Helmet>
 
-{/*
+			<a.div
+			style={{
+			//// [FIXME][MEMO][HEURISTIC] backdrop-filter cannot invoked by style in react component... but if you use className of emotion at first, backdrop-filter's property in style activated... ( so all backdrop-filter is written in emotion and never written in style is preffered, this is at unknown reason )
+			//// [FIXME][MEMO][HEURISTIC] backdrop-filter cannot invoked by style so this backdropFilter syntax cannot be involed and coonected with react-spring target instance
+			// backdropFilter: applyHellFilter
+			// 	.interpolate({
+			// 	range: [0, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 1],
+			// 	output: [1, 0.97, 0.9, 1.1, 0.9, 1.1, 1.03, 1]
+			// 	})
+			// 	.interpolate((_x) => `invert(${_x})`)
+			}}
+			>
 			<div style={{
 					// [FIXME][MEMO][HEURISTIC] backdrop-filter cannot invoked by style in react component... but if you use className of emotion at first, backdrop-filter's property in style activated... ( so all backdrop-filter is written in emotion and never written in style is preffered, this is at unknown reason )
 					position:'absolute',
@@ -1286,8 +1468,67 @@ const App = () => {
 					
 				}} className={backdropFilterHell1}>
 			</div>
-			
-*/}			
+			</a.div>
+
+
+
+
+			{/* DISPLAY SURFACE DESIGN */}
+			<div style={{
+					position:'absolute',
+					height:screenSize.height,
+					width:screenSize.width,
+					zIndex:100+100,
+					pointerEvents:"none",
+					boxSizing:"border-box",
+					boxShadow:"inset 0 0 10px 5px rgba(0,0,0,0.15)",
+					content: "",
+					border:10+"px solid",
+					borderColor:"rgba(0,0,0,0.3)",
+					//outlineStyle:"solid",
+					//outlineColor:"rgba(0,0,0,1)",
+					//outlineWidth:"20px",
+			}} >
+			</div>
+
+			{/* DISPLAY CLEAR VIDEO */}
+			{ (!canShowClearVideo)
+			? <></> 
+			:
+			<div style={{
+					position:'absolute',
+					height:screenSize.height,
+					width:screenSize.width,
+					zIndex:100+100+100,
+					//pointerEvents:"none",
+					backgroundColor:"rgba(0,0,0,1.0)",
+			}} >
+				<video autoPlay controls
+				style={{
+					position:'absolute',
+					height:screenSize.height,
+					width:screenSize.width,
+					zIndex:100+100+100,
+					//pointerEvents:"none",
+					boxSizing:"border-box",
+					//boxShadow:"inset 0 0 10px 5px rgba(0,0,0,0.15)",
+					//content: "",
+					//border:10+"px solid",
+					//borderColor:"rgba(0,0,0,0.3)",
+					//outlineStyle:"solid",
+					//outlineColor:"rgba(0,0,0,1)",
+					//outlineWidth:"20px",
+				}}
+				>
+					<source src={kyokoVideo} type="video/mp4" />
+				</video>
+					
+			</div>
+			}
+
+
+
+
 
 			<div className={backgroundParallax}>
 
@@ -1387,8 +1628,8 @@ const App = () => {
 									border: "none", 
 									position: "absolute", 
 									fontSize:"20px",
-									top: 16+"px", 
-									right: "16px",
+									top: 10/*inset of bg surface*/+16+"px", 
+									right: 10-5+16+"px",
 									padding: "8px",
 									textAlign: "center",
 									zIndex: "10",
@@ -1407,7 +1648,7 @@ const App = () => {
 			{ isOverWidth ||
 			<NoticeBar 	mode="closable" 
 						marqueeProps= {{ loop: true, leading: 1000, trailing: 5000, style: { padding: '0 7.5px', fontFamily:"PixelMPlus" }} }
-						style={{marginTop: 16+3+"px", marginLeft:15+5+"px", marginRight:40+15+"px"}}> ─────── 2021年・・・人類は新年を迎えるハズだったが「永遠にお正月コタツで寝てたい」という『マモノたち』の手により、怪物事変が起こり、世界の時空は歪められてしまった・・・　勇者よ、我らのミライを取り戻してほしい・・・</NoticeBar>
+						style={{marginTop: 10+16+3+"px", marginLeft:10-5+15+5+"px", marginRight:40+15+"px"}}> ─────── 春を迎えるはずだった─ ──世界は歪んで ───── ── ── ─ ─────誰か── ── ─ここに来て─────平和を取り戻して── ─ ─ ─ ─── ─ ─ ─ ── ── </NoticeBar>
 			}
 
 			{/* BGM SWITCH INDICATOR Actor */}
@@ -1419,13 +1660,13 @@ const App = () => {
 					width: 40+"px",
 					height: 40+"px",
 					position: "absolute", 
-					top: 16+2+"px", 
-					left: 16+"px",
+					top: 10+16+2+"px", 
+					left: 10-5+16+"px",
 					padding: "0px",
 					textAlign: "center",
 					zIndex: "10",
 				}}
-				onClick={toggleBGM}>
+				onClick={( (currStage < (MAX_STAGE_COUNT-1)-1) ? toggleBGM : null )/*///[TEMPORARY COMMENT OUT]///toggleBGM*/}>
 				{ (isBGMPlaying) ?
 					<SymbolSoundOn className={StyleSymbolSoundOn}/> : 
 					<SymbolSoundOff className={StyleSymbolSoundOff}/>
@@ -1444,12 +1685,13 @@ const App = () => {
 					border: "none", 
 					position: "absolute", 
 					fontSize:"20px",
-					top: "16px", 
-					right: "16px",
+					top: 10+16+"px", 
+					right: 10-5+16+"px",
 					padding: "8px",
 					textAlign: "center",
+					color:"rgb(0, 0, 0)",
 					zIndex: 6,//((window.scrollY>100) ? 5+1 : 5 ),
-				}}>🎍
+				}}> Санкт
 			</button>
 			}
 			
@@ -1485,15 +1727,14 @@ const App = () => {
 							className={FirstViewWhiteSpace} 
 							onClick={ async (e)=>{
 								e.preventDefault()
-								
-								logicBattle()
+								logicBattle( {event:e} )
  							}}>
 						</div>
 						
 						<div className={ArticleContainer}>
-							<h1 style={{ color:"#0f1923", fontFamily:"Noto Sans JP" }}>
-								<div id="newyear-text" style={{display:"inline"}}>HAPPY NEW YEAR 20</div>
-								<div className={crossText}>21</div>
+							<h1 style={{ color:"#0f1923", fontFamily:"Noto Sans JP", fontWeight:"bold", transform: "scaleX(1)" }}>
+								{/*///[TEMPORARY]///<div id="newyear-text" style={{display:"inline"}}>HAPPY NEW YEAR <br/>20</div>*/}
+								{/*///[TEMPORARY]///<div className={crossText}>21</div>*/}
 							</h1>
 							<WhiteSpace lg/>
 							<WhiteSpace lg/>
@@ -1512,13 +1753,13 @@ const App = () => {
 							<Button
 								onClick={ ()=>{
 									//window.document.querySelector("#BGMSwitcher").click()
-									toggleBGM()
+									if (currStage < (MAX_STAGE_COUNT-1)) toggleBGM() ///[TEMPORARY COMMENT OUT]///toggleBGM()
 									if(!isBGMPlaying) {playSFXscan03Alt()} } 
 								} 
 								style={{
 									borderRadius:"30px", border:"1px solid #ffffff", 
-									width:parseInt(screenSize.width)-30-15+"px",
-									boxSizing:"border-box", background:"rgba(255,255,255,0.3)", 
+									width:parseInt(screenSize.width)-30-15-(20)+"px",
+									boxSizing:"border-box", background:"rgba(0,0,0,0.8)", color:"rgba(255,255,255,1)", //"rgba(255,255,255,0.3)", 
 									display:"flex", justifyContent:"center", alignItems:"center", fontFamily:"Poppins"}}>
 									|  || ||||| ||| ||| ||| ||||     ||
 							</Button>
@@ -1528,40 +1769,43 @@ const App = () => {
 							<WhiteSpace />
 
 							<Modal
+								id="modalParamsEnemy"							
 								style={{fontFamily:"PixelMPlus"}}
-								visible={stateModal.modalMessageEnemy}
+								visible={stateModal.modalParamsEnemy}
 								transparent
 								maskClosable={true}
-								onClose={onClose('modalMessageEnemy')}
+								onClose={onClose('modalParamsEnemy')}
 								title={enemyList?.["E00"+(currStage+1)]?.name+" : HP"}
-								footer={[{ text: '▼', onPress: (e) => { onClose('modalMessageEnemy')(e); } }]}
+								footer={[{ text: '▼', onPress: (e) => { onClose('modalParamsEnemy')(e); } }]}
 								wrapProps={{ onTouchStart: onWrapTouchStart }}
 								afterClose={() => { 
-									/*if(currStage<MAX_STAGE_COUNT-1)*/ mesBattle?.[enemyList?.["E00"+(currStage+1)]?.id]?.[currentHPBattleEvent]?.snd()
+									//if(currStage<MAX_STAGE_COUNT-1) mesBattle?.[enemyList?.["E00"+(currStage+1)]?.id]?.[currentHPBattleEvent]?.snd()
 									//else playSFXerror14()
-									showModal("modal2")()
+									mesBattle?.[enemyList?.["E00"+(currStage+1)]?.id]?.[currentHPBattleEvent]?.snd?.()
+									showModal("modalEnemyTalking")()
 								 }}
 							>
 								<div style={{ height: "100px", overflow: 'scroll' }}>
 									<br />
 									<Progress percent={parseInt(( HPEnemy / enemyList?.["E00"+(currStage+1)]?.HP )*100)} position="normal" unfilled={true} barStyle={{borderRadius:"5px"}} style={{}} appearTransition/>
-									{HPEnemy}/20{enemyList?.["E00"+(currStage+1)]?.assignedYearSuffix}
+									{HPEnemy}/{/*20*/}19{enemyList?.["E00"+(currStage+1)]?.assignedYearSuffix}
 									
 								</div>
 							</Modal>
 
 							<Modal
+								id="modalMagicGuard"
 								style={{fontFamily:"PixelMPlus"}}
 								visible={stateModal.modalMagicGuard}
 								transparent
 								maskClosable={true}
-								onClose={onClose('modalMessageEnemy')}
-								title={enemyList?.["E00"+(currStage+1)]?.name+" : HP"}
-								footer={[{ text: '▼', onPress: (e) => { onClose('modalMessageEnemy')(e); } }]}
+								onClose={onClose('modalMagicGuard')}
+								title={<div style={{color:"DodgerBlue"}}>《 シールド - 水の呼吸 》</div>}
+								footer={[{ text: '▼', onPress: (e) => { onClose('modalParamsEnemy')(e); } }]}
 								wrapProps={{ onTouchStart: onWrapTouchStart }}
 								afterClose={() => { 
-									mesBattle?.[enemyList?.["E00"+(currStage+1)]?.id]?.[currentHPBattleEvent]?.snd()
-									showModal("modal2")()
+									//mesBattle?.[enemyList?.["E00"+(currStage+1)]?.id]?.[currentHPBattleEvent]?.snd()
+									//showModal("modalEnemyTalking")()
 								 }}
 							>
 								<div style={{ height: "100px", overflow: 'scroll' }}>
@@ -1569,26 +1813,28 @@ const App = () => {
 									<Progress percent={parseInt(( HPEnemy / enemyList?.["E00"+(currStage+1)]?.HP )*100)} position="normal" unfilled={true} barStyle={{borderRadius:"5px"}} style={{}} /*appearTransition*/ />
 									{HPEnemy}/20{enemyList?.["E00"+(currStage+1)]?.assignedYearSuffix}
 									<br />
-									ガードコマンド
+									《{enemyList?.["E00"+(currStage+1)]?.name}》は特殊な魔法陣を発動した・・・！！！
 								</div>
 							</Modal>
 
-							{/* <Button onClick={ showModal("modal2") } style={{zIndex:"100", borderRadius:"30px", visibility:"hidden"}}>|  ||| |||| |||</Button> */}
+							{/* <Button onClick={ showModal("modalEnemyTalking") } style={{zIndex:"100", borderRadius:"30px", visibility:"hidden"}}>|  ||| |||| |||</Button> */}
 							
 							<Modal
+								id="modalEnemyTalking"
 								style={{fontFamily:"PixelMPlus"}}
-								visible={stateModal.modal2}
+								visible={stateModal.modalEnemyTalking}
 								transparent
 								maskClosable={true}
-								onClose={onClose('modal2')}
+								onClose={onClose('modalEnemyTalking')}
 								title={enemyList?.["E00"+(currStage+1)]?.name}
-								footer={[{ text: '▼', onPress: () => { onClose('modal2')(); } }]}
+								footer={[{ text: '▼', onPress: (e) => { onClose('modalEnemyTalking')(e); } }]}
 								wrapProps={{ onTouchStart: onWrapTouchStart }}
 								afterClose={() => {}}
 							>
 								<div style={{ height: "100px", overflow: 'scroll' }}>
 									<br />
-									<Typewriter stopBlinkinOnComplete={true} string={mesBattle?.[enemyList?.["E00"+(currStage+1)]?.id]?.[currentHPBattleEvent]?.mes} delay=
+									<Typewriter stopBlinkinOnComplete={true} string={mesBattle?.[enemyList?.["E00"+(currStage+1)]?.id]?.[currentHPBattleEvent]?.mes} 
+									delay=
 									{
 										`${(currStage == MAX_STAGE_COUNT-1) ? "50" : "100"}`
 									} />
@@ -1597,13 +1843,14 @@ const App = () => {
 
 
 							<Modal
+								id="modalStageClear"
 								style={{fontFamily:"PixelMPlus"}}
 								visible={stateModal.modalStageClear}
 								transparent
 								maskClosable={true}
 								onClose={onClose('modalStageClear')}
 								title={"空 想 切 除 - "+enemyList?.["E00"+(currStage)]?.iconicKanji}
-								footer={[{ text: '▼', onPress: () => {onClose('modalStageClear') } }]}
+								footer={[{ text: 'GO NEXT', onPress: (e) => {onClose('modalStageClear')(e) } }]}
 								wrapProps={{ onTouchStart: onWrapTouchStart }}
 								afterClose={() => { 
 
@@ -1611,7 +1858,7 @@ const App = () => {
 							>
 								<div style={{ height: "100px", overflow: 'scroll' }}>
 									<br />
-									「20{enemyList?.["E00"+(currStage+1-1)]?.assignedYearSuffix}年」の守護獣を倒した！
+									「{/*20*/}19{enemyList?.["E00"+(currStage+1-1)]?.assignedYearSuffix}年」の守護獣を倒した！
 									<br />
 									レベルが1あがった！！！
 								</div>
@@ -1619,13 +1866,14 @@ const App = () => {
 
 
 							<Modal
+								id="modalTakedown"							
 								style={{fontFamily:"PixelMPlus"}}
 								visible={stateModal.modalTakedown}
 								transparent
 								maskClosable={true}
 								onClose={onClose('modalTakedown')}
 								title={""}
-								footer={[{ text: '▼', onPress: () => { onClose('modalTakedown') } }]}
+								footer={[{ text: '▼', onPress: (e) => { onClose('modalTakedown')(e) } }]}
 								wrapProps={{ onTouchStart: onWrapTouchStart }}
 								afterClose={(e) => { 
 									showModal("modalStageClear")(e)
@@ -1653,7 +1901,7 @@ const App = () => {
 					/>
 				</ParallaxLayer>
 
-				{ (currStage<1)
+				{ false///[TEMPORARY COMMENT OUT]///(currStage<MAX_STAGE_COUNT-3) (currStage<1)
 
 				? <></> 
 				:
@@ -1768,7 +2016,7 @@ const App = () => {
 				</ParallaxLayer>
 
 
-				{ (currStage<MAX_STAGE_COUNT-3)
+				{ false///[TEMPORARY COMMENT OUT]///(currStage<MAX_STAGE_COUNT-3) 
 				?
 				<></>
 				:
@@ -1792,9 +2040,12 @@ const App = () => {
 					<img onClick={ (e)=>{e.preventDefault; playSFXclick8()}} className={touchable}  
 					src={GameTown} 
 					style={{ transform: "translateX(-40%) translateY(-28%) scale(0.7)" }}/>
-					<img onClick={ (e)=>{e.preventDefault; playSFXduckS2()}} className={touchable}  
+					<img onClick={ (e)=>{e.preventDefault; playSFXLevelUp()}} className={touchable}  
 					src={rat}
 					style={{ transform: "translateX(80%) translateY(-2828%) scale(0.2)", zIndex:100+1 }}/> {/*20, 2228*/}
+					<img onClick={ (e)=>{e.preventDefault; if(currStage== MAX_STAGE_COUNT-1) {stopAllBGMs();setCanShowClearVideo(true); playSFXclick8()}}} className={touchable}  
+					src={rat}
+					style={{ transform: "translateX(30%) translateY(-2228%) scale(0.5)", zIndex:100+1 }}/> {/*20, 2228*/}
 
 				</ParallaxLayer>	
 
