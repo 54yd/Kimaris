@@ -1185,7 +1185,7 @@ const App = () => {
 
 	const _flash= null
    ///[WHERE THIS DEFINES WAS MOVED AT R215] ///const _invert_strength     = filterInvertParam 	///[TEMPORARY]///0.7+0.2
-    const _blur_strength       = 1.0-0.15+"px"	///[TEMPORARY]///2+"px"
+    const _blur_strength       = 1.0-0.15-0.4+"px"	///[TEMPORARY]///2+"px"
     const _grayscale_strength  = 0			///[TEMPORARY]///1.0
    ///[WHERE THIS DEFINES WAS MOVED AT R217] ///const _brightness_strength = 1.1-0.1		///[TEMPORARY]///0.3
     const _hue_strength        = 0+"deg"	///[TEMPORARY]///0.3
