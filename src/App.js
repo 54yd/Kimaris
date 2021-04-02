@@ -1051,9 +1051,17 @@ const App = () => {
 	// CSS and Design
 	// ------------------------------
 
+	// Disable Long Tap Menu (Copy etc)
+	window.oncontextmenu = function(event) {
+		event.preventDefault();
+		event.stopPropagation();
+		return false;
+   	}
+
 	const RootDesign = css`
 		display: flex;
 		width:100%;
+		user-select: none;
 	`
 	const backgroundParallax = css`
 		--heightWeight : 10;
