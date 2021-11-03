@@ -787,14 +787,14 @@ const App = () => {
 		
 		if( sBrowser == "unknown" || sBrowser == null) { setBrowser("XXXXX"); } else { setBrowser(sBrowser) }
 
-		if (/iPhone|iPod|iPad/i.test(window.navigator.userAgent) ) {
-			if (sBrowser=="Firefox" || sBrowser=="Safariブラウザ" || sBrowser=="Internet Explorer") { setSignal("XXXXX") }
-			else { 
-				if ( window.NetworkInformation.effectiveType == false || String(window.NetworkInformation.effectiveType) == "false" ) setSignal("XXXX")
-				else if ( String(window.NetworkInformation.effectiveType).toUpperCase()=="" ) setSignal( "XXXXXX" )
-				else ( setSignal(window.NetworkInformation.effectiveType.toUpperCase()) )
-			}
-		}
+		// if (/iPhone|iPod|iPad/i.test(window.navigator.userAgent) ) {
+		// 	if (sBrowser=="Firefox" || sBrowser=="Safariブラウザ" || sBrowser=="Internet Explorer") { setSignal("XXXXX") }
+		// 	else { 
+		// 		if ( window.NetworkInformation?.effectiveType == false || String(window.NetworkInformation?.effectiveType) == "false" ) setSignal("XXXX")
+		// 		else if ( String(window.NetworkInformation.effectiveType).toUpperCase()=="" ) setSignal( "XXXXXX" )
+		// 		else ( setSignal(window.NetworkInformation.effectiveType.toUpperCase()) )
+		// 	}
+		// }
 
 		const md = new MobileDetect(window.navigator.userAgent)
 		let phonename = ( ((md.phone()?.toUpperCase()=="UNKNOWNPHONE") ? "UNKNOWNPHONE" : false) || md.mobile() )
@@ -1702,7 +1702,12 @@ const App = () => {
 
 			:
 
-			<Parallax ref={ref => (parallax = ref)} pages={6.35} style={{zIndex:"5"}}>
+			<Parallax 
+				ref={ref => (parallax = ref)} 
+				pages={6.35} 
+				style={{zIndex:"5"}}
+				config={{ duration: 0 }}
+			>
 
 
 				<ParallaxLayer offset={1} speed={0} className={unTouchable} style={{ backgroundColor: '#0aceff',zIndex:"0" }} />
