@@ -99,9 +99,6 @@ import RatcubeUSDZ from './assets/models/usdz/Ratcube.usdz'
 import { Parallax, ParallaxLayer } from 'react-spring/renderprops-addons'
 
 //Sounds
-import BGMOcean1 from './Ocean1.mp3';
-import BGMdetective from './Times Square_2.mp3';
-import BGMdv2 from './TD2Theme_2.mp3';
 import BGMending from './BUILT TO LAST  Official_2_short_80.mp3';
 //import BGM from './.mp3';
 
@@ -159,7 +156,7 @@ const FIRST_CAMERA_POS = 2.5 //2 to car
 
 const MAX_STAGE_COUNT = 4　//5
 const MIN_DAMAGE_PARAM =  1//[CAUTION][MEMO][HEURISTIC] 0 if zero, HP battle event sort (previous event registration got error)
-const BGM_COUNT = 4
+const BGM_COUNT = 1//4
 
 const FIRST_PLAYBACK_RATE = 1.0
 const FIRST_INVENTORY = {}
@@ -239,9 +236,9 @@ const App = () => {
 
 	const [playbackRate ,setPlaybackRate] = useState(FIRST_PLAYBACK_RATE) // 4.0 //0.35
 
-    const [volumeOcn1,	  	setVolumeOcn1	]  		= useState(0.5) // 4.0 //0.35
-    const [volumeDv2, 		setVolumeDv2	]     	= useState(1.0) // 4.0 //0.35
-    const [volumeDtv, 		setVolumeDtv	]     	= useState(0.6) // 4.0 //0.35
+    // const [volumeOcn1,	  	setVolumeOcn1	]  		= useState(0.5) // 4.0 //0.35
+    // const [volumeDv2, 		setVolumeDv2	]     	= useState(1.0) // 4.0 //0.35
+    // const [volumeDtv, 		setVolumeDtv	]     	= useState(0.6) // 4.0 //0.35
     const [volumeEnding, 	setVolumeEnding	]		= useState(1.0) // 4.0 //0.35
 
 	const [volumeWeight,	setVolumeWeight	]  		= useState(0.0) // 4.0 //0.35
@@ -249,9 +246,9 @@ const App = () => {
 	// [TIPS] ES6 Destructure import caught by : (it is not key:value, means a command framed key:(const variable) then import as variable=key )
 	// BGMs
 	// [FIXME] Expected useSound Manager that Combine BGMs Array and make const var dynamically	
-    const [playBGMOcn1,	 	{stop   : stopBGMOcn1} ] = useSound(BGMOcean1,		{ playbackRate, volume: volumeOcn1+volumeWeight,	  	loop:true })
-    const [playBGMdv2, 		{stop    : stopBGMdv2} ] = useSound(BGMdv2,			{ playbackRate, volume: volumeDv2+volumeWeight, 		loop:true })
-    const [playBGMDtv, 		{stop    : stopBGMDtv} ] = useSound(BGMdetective,	{ playbackRate, volume: volumeDtv+volumeWeight, 		loop:true })
+    // const [playBGMOcn1,	 	{stop   : stopBGMOcn1} ] = useSound(BGMOcean1,		{ playbackRate, volume: volumeOcn1+volumeWeight,	  	loop:true })
+    // const [playBGMdv2, 		{stop    : stopBGMdv2} ] = useSound(BGMdv2,			{ playbackRate, volume: volumeDv2+volumeWeight, 		loop:true })
+    // const [playBGMDtv, 		{stop    : stopBGMDtv} ] = useSound(BGMdetective,	{ playbackRate, volume: volumeDtv+volumeWeight, 		loop:true })
     const [playBGMending, 	{stop : stopBGMending} ] = useSound(BGMending,		{ playbackRate, volume: volumeEnding+volumeWeight, 		loop:true })
 
 
@@ -657,9 +654,9 @@ const App = () => {
 
 
 	const stopAllBGMs = () => {
-		stopBGMOcn1()
-		stopBGMdv2()
-		stopBGMDtv()
+		// stopBGMOcn1()
+		// stopBGMdv2()
+		// stopBGMDtv()
 		stopBGMending()
 	}
 
@@ -722,10 +719,10 @@ const App = () => {
 			let playBGMDelegate = null //[FIXME] use delegate array and index by stacking funcs !!
 			let stopBGMDelegate = null
 			if ( currBGMIndex == 1 ) { playBGMDelegate = playBGMending; stopBGMDelegate = stopBGMending; }
-			else if ( currBGMIndex == 2 ) { playBGMDelegate = playBGMOcn1; stopBGMDelegate = stopBGMOcn1; }
-			else if ( currBGMIndex == 3 ) { playBGMDelegate = playBGMdv2; stopBGMDelegate = stopBGMdv2; }
-			else if ( currBGMIndex == 4 ) { playBGMDelegate = playBGMDtv; stopBGMDelegate = stopBGMDtv; }
-			else  { playBGMDelegate = playBGMdv2; stopBGMDelegate = stopBGMdv2; } // error handling safenet
+			// else if ( currBGMIndex == 2 ) { playBGMDelegate = playBGMOcn1; stopBGMDelegate = stopBGMOcn1; }
+			// else if ( currBGMIndex == 3 ) { playBGMDelegate = playBGMdv2; stopBGMDelegate = stopBGMdv2; }
+			// else if ( currBGMIndex == 4 ) { playBGMDelegate = playBGMDtv; stopBGMDelegate = stopBGMDtv; }
+			// else  { playBGMDelegate = playBGMdv2; stopBGMDelegate = stopBGMdv2; } // error handling safenet
 			
 			console.log(currBGMIndex)
 			if (isBGMPlaying) {
