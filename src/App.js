@@ -99,7 +99,7 @@ import RatcubeUSDZ from './assets/models/usdz/Ratcube.usdz'
 import { Parallax, ParallaxLayer } from 'react-spring/renderprops-addons'
 
 //Sounds
-import BGMending from './assets/BGMs/webm/BUILT_TO_LAST_Official_2_short_80.webm';
+import BGMending from './assets/BGMs/BUILT_TO_LAST_Official_2_short_80.mp3';
 //import BGM from './.mp3';
 
 import SFXget2 from './Cash register 2.mp3'
@@ -144,7 +144,7 @@ import SFXLevelUp from "./level-up.mp3"
 import SFXGuard from "./spell.mp3"
 
 
-import SFXCarCrush from "./assets/BGMs/webm/CarCrush_mixdown.webm"
+import SFXCarCrush from "./assets/BGMs/CarCrush_mixdown.mp3"
 import { get } from 'lodash-es'
 
 // Constants
