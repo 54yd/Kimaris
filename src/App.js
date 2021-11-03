@@ -86,18 +86,14 @@ import GameTown from "./Example2.gif"
 import TrainTown from "./TrainstationExampleAnimated.gif"
 
 //GLTF, GLB, usdz
-import DuckGLB from 'Duck.glb'
-import DuckUSDZ from 'Duck.usdz'
-import FoxGLB from 'Fox.glb'
-import FoxUSDZ from 'Fox.usdz'
-import ToycarGLB from 'Toycar.glb'
-import ToycarUSDZ from 'Toycar.usdz'
-import RatcubeGLB from 'Ratcube.glb'
-import RatcubeUSDZ from 'Ratcube.usdz'
-
-
-import CubeClueGLB from 'CubeClue.glb'
-import SharkGLB from 'Shark.glb'
+import DuckGLB from './assets/models/glb/Duck.glb'
+import DuckUSDZ from './assets/models/usdz/Duck.usdz'
+import FoxGLB from './assets/models/glb/Fox.glb'
+import FoxUSDZ from './assets/models/usdz/Fox.usdz'
+import ToycarGLB from './assets/models/glb/Toycar.glb'
+import ToycarUSDZ from './assets/models/usdz/Toycar.usdz'
+import RatcubeGLB from './assets/models/glb/Ratcube.glb'
+import RatcubeUSDZ from './assets/models/usdz/Ratcube.usdz'
 
 //Parallax
 import { Parallax, ParallaxLayer } from 'react-spring/renderprops-addons'
