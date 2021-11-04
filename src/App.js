@@ -3,14 +3,6 @@ import React from 'react'
 import { useState, useEffect, useRef } from 'react'
 import { css,keyframes } from 'emotion'
 
-//Animation Addons
-import Particles from "react-tsparticles"
-import particlesOptions from "./particles.json"
-import polynomialParticles from "./polynomialParticles.json"
-import nasaParticles from "./nasaParticles.json"
-
-import GlitchClip from 'react-glitch-effect/core/Clip'
-import GlitchText from 'react-glitch-effect/core/Text'
 
 import { Typewriter } from 'react-typewriting-effect'
 import './typewriter.css'
@@ -24,18 +16,15 @@ import useSound from 'use-sound'
 
 //Utils
 import useScrollPosition from './useScrollPosition'
-import { RotateGradient } from './RotateGradient'
-import { AddHomeButton } from './AddHomeButton'
 
 // Fetcher
-import axios from 'axios';
+import axios from 'axios'
 
 // Mobile Device Detector
 import MobileDetect from 'mobile-detect'
 
 //Components
 import "./Root.css"
-//import { PingPong } from './PingPong'
 
 import {
 	Flex,
@@ -90,7 +79,7 @@ import DuckGLB from './assets/models/glb/Duck.glb'
 import DuckUSDZ from './assets/models/usdz/Duck.usdz'
 import FoxGLB from './assets/models/glb/Fox.glb'
 import FoxUSDZ from './assets/models/usdz/Fox.usdz'
-import ToycarGLB from './assets/models/glb/Toycar.glb'
+import ToycarGLB from './assets/models/glb/_Toycar.glb'
 import ToycarUSDZ from './assets/models/usdz/Toycar.usdz'
 import RatcubeGLB from './assets/models/glb/Ratcube.glb'
 import RatcubeUSDZ from './assets/models/usdz/Ratcube.usdz'
@@ -102,50 +91,49 @@ import { Parallax, ParallaxLayer } from 'react-spring/renderprops-addons'
 import BGMending from './assets/BGMs/BUILT_TO_LAST_Official_2_short_80.mp3';
 //import BGM from './.mp3';
 
-import SFXget2 from './Cash register 2.mp3'
-import SFXduck7 from "./duck_2_quack_07.mp3"
-import SFXduck8 from "./duck_2_quack_08.mp3"
-import SFXduckS2 from "./duck_2_quack_seq_02.mp3"
-import SFXduckS5 from "./duck_2_quack_seq_05.mp3"
-import SFXclick8 from "./Click back sounds 8.mp3"
+import SFXget2 from './assets/sounds/Cash register 2.mp3'
+import SFXduck7 from "./assets/sounds/duck_2_quack_07.mp3"
+import SFXduck8 from "./assets/sounds/duck_2_quack_08.mp3"
+import SFXduckS2 from "./assets/sounds/duck_2_quack_seq_02.mp3"
+import SFXduckS5 from "./assets/sounds/duck_2_quack_seq_05.mp3"
+import SFXclick8 from "./assets/sounds/Click back sounds 8.mp3"
 
-import SFXdog01 from "./Dog bark 1.mp3"
-import SFXdog02 from "./Dog bark 2.mp3"
-import SFXdog03 from "./Dog bark 3.mp3"
-import SFXdog04 from "./Dog bark 4.mp3"
-import SFXdog05 from "./Dog bark 5.mp3"
+import SFXdog01 from "./assets/sounds/Dog bark 1.mp3"
+import SFXdog02 from "./assets/sounds/Dog bark 2.mp3"
+import SFXdog03 from "./assets/sounds/Dog bark 3.mp3"
+import SFXdog04 from "./assets/sounds/Dog bark 4.mp3"
+import SFXdog05 from "./assets/sounds/Dog bark 5.mp3"
 
-import SFXcar01 from "./car 1.mp3"
-import SFXcar02 from "./car 2.mp3"
-import SFXcar03 from "./car 3.mp3"
-import SFXcar04 from "./car 4.mp3"
-import SFXcar05 from "./car 5.mp3"
+import SFXcar01 from "./assets/sounds/car 1.mp3"
+import SFXcar02 from "./assets/sounds/car 2.mp3"
+import SFXcar03 from "./assets/sounds/car 3.mp3"
+import SFXcar04 from "./assets/sounds/car 4.mp3"
+import SFXcar05 from "./assets/sounds/car 5.mp3"
 
-import SFXerror14 from "./Error Sound 14.mp3"
-import SFXerror21 from "./Error Sound 21.mp3"
-import SFXerror25 from "./Error Sound 25.mp3"
-import SFXscan03 from "./sci-fi_scan_target_03.mp3"
+import SFXerror14 from "./assets/sounds/Error Sound 14.mp3"
+import SFXerror21 from "./assets/sounds/Error Sound 21.mp3"
+import SFXerror25 from "./assets/sounds/Error Sound 25.mp3"
+import SFXscan03 from "./assets/sounds/sci-fi_scan_target_03.mp3"
 
-import SFXsand04 from "./footstep_sand_run_04.mp3"
-import SFXfoot15 from "./footstep_metal_low_walk_15.mp3"
-import SFXretro02 from "./retro_beeps_success_02.mp3"
-import SFXretro10 from "./retro_simple_beep_10.mp3"
+import SFXsand04 from "./assets/sounds/footstep_sand_run_04.mp3"
+import SFXfoot15 from "./assets/sounds/footstep_metal_low_walk_15.mp3"
+import SFXretro02 from "./assets/sounds/retro_beeps_success_02.mp3"
+import SFXretro10 from "./assets/sounds/retro_simple_beep_10.mp3"
 
-import SFXbeep05 from "./sci-fi_driod_robot_emote_beeps_05.mp3"
-import SFXrobot01 from "sci-fi_driod_robot_emote_01.mp3"
-import SFXrobot02 from "sci-fi_driod_robot_emote_02.mp3"
-import SFXrobot06 from "sci-fi_driod_robot_emote_06.mp3"
+import SFXbeep05 from "./assets/sounds/sci-fi_driod_robot_emote_beeps_05.mp3"
+import SFXrobot01 from "./assets/sounds/sci-fi_driod_robot_emote_01.mp3"
+import SFXrobot02 from "./assets/sounds/sci-fi_driod_robot_emote_02.mp3"
+import SFXrobot06 from "./assets/sounds/sci-fi_driod_robot_emote_06.mp3"
 
-import SFXtakedown02 from "./EMP Explosion_02.mp3"
-import SFXtakedown00 from "./victory.mp3"
+import SFXtakedown02 from "./assets/sounds/EMP Explosion_02.mp3"
+import SFXtakedown00 from "./assets/sounds/victory.mp3"
 
-import SFXYellAndATK from "./YellAndAttack.mp3"
-import SFXLevelUp from "./level-up.mp3"
-import SFXGuard from "./spell.mp3"
+import SFXYellAndATK from "./assets/sounds/YellAndAttack.mp3"
+import SFXLevelUp from "./assets/sounds/level-up.mp3"
+import SFXGuard from "./assets/sounds/spell.mp3"
 
 
 import SFXCarCrush from "./assets/BGMs/CarCrush_mixdown.mp3"
-import { get } from 'lodash-es'
 
 // Constants
 const PLAYABLE_MAX_WIDTH = 800-100
@@ -697,7 +685,7 @@ const App = () => {
 
 			return () => window.removeEventListener("resize", handleResize);
 			
-	},[])
+	},[window.innerHeight])
 
 	useEffect(
 	()=>{
@@ -1054,12 +1042,25 @@ const App = () => {
 	const RootDesign = css`
 		display: flex;
 		width:100%;
-		user-select: none;
-	`
-	const backgroundParallax = css`
-		--heightWeight : 10;
 
-		position: absolute;
+		user-drag: none; /*Webpack compile this to be compatible with Webkit*/
+		user-select:none; /*Webpack compile this to be compatible with Webkit*/
+		-webkit-touch-callout: none; /* disable the IOS popup when long-press on a link */
+	`
+	const frameRootDesign = css`
+		--heightWeight : 1;
+
+		//position: absolute;
+		//position: sticky; //[FIXME] 20211104 fixed: This sticky cause user can drag 3d model borad, then they can see the background(RootDesign), It seems bug and neglegent design So Make into "fixed"
+		position: fixed;
+		
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
+		pointer-events:none;
+		user-drag: none; /*Webpack compile this to be compatible with Webkit*/
+		user-select:none; /*Webpack compile this to be compatible with Webkit*/
+		-webkit-touch-callout: none; /* disable the IOS popup when long-press on a link */
+
 
 		display: flex;
 		width:100%;
@@ -1075,6 +1076,11 @@ const App = () => {
 	`	
 
 	const backgroundModelBoard = css`
+
+		user-drag: none; /*Webpack compile this to be compatible with Webkit*/
+		user-select:none; /*Webpack compile this to be compatible with Webkit*/
+		-webkit-touch-callout: none; /* disable the IOS popup when long-press on a link */
+
 		model-viewer {
 		
 			margin: auto;
@@ -1084,8 +1090,9 @@ const App = () => {
 					
 			background-color: rgba(0, 0, 0, 0);
 		}
+		//position: sticky; //[FIXME] 20211104 fixed: This sticky cause user can drag 3d model borad, then they can see the background(RootDesign), It seems bug and neglegent design So Make into "fixed"
+		position: fixed;
 
-		position: sticky;
 		box-sizing: border-box;
 		
 		top: 0;
@@ -1098,6 +1105,8 @@ const App = () => {
 
 		// *** Sorting Priority (higher is front)
 		z-index: 1;
+
+		
 	`	
 
 	const FirstViewWhiteSpace = css`
@@ -1194,7 +1203,7 @@ const App = () => {
     ///[WHERE THIS DEFINES WAS MOVED AT R217] ///const _saturate_strength   = 1.3		///[TEMPORARY]///1.0
 	const _contrast_strength   = 1.3		///[TEMPORARY]///1.0
 
-	const backdropFilterHell1 = css`
+	const backdropFilterHellGeneral = css`
 		backdrop-filter: 
 			contrast(${_contrast_strength}) 
 			invert(${_invert_strength}) 
@@ -1205,125 +1214,26 @@ const App = () => {
 			sepia(${_sepia_strength}) 
 			saturate(${_saturate_strength});
 	`
-	const _movie_brightness_strength = 0.0
-	const backdropFilterMovie1 = css`
-	backdrop-filter: 
-		brightness(${_brightness_strength});
-	`
-
-	const ButtonFillAnimation = css`
-		content: "";
-		display: block;
-		position: absolute;
-		height: 100%;
-		width: 120%;
-		top: 0;
-		left: -5%;
-		background: #00bfff;
-		transform: translateX(-100%) skew(-10deg);
-		transition: -webkit-transform 0.3s ease-out;
-		transition: transform 0.3s ease-out;
-		
-		&:hover {
-			transform: translateX(0) skew(-10deg);
-		}
-  }
-	`
-
-	const crossText = css`
-		--border-black:3px solid rgba(0,0,0,0.8);
-		position: relative;
-		display: inline-block;
-		
-		&::before, &::after {
-			content: '';
-			width: 100%;
-			position: absolute;
-			right: 0;
-			top: 50%;
-		}
-		&::before {
-			border-bottom: var(--border-black);
-			-webkit-transform: skewY(-30deg);
-			transform: skewY(-30deg);
-		}
-		&::after {
-			border-bottom: var(--border-black);
-			-webkit-transform: skewY(30deg);
-			transform: skewY(30deg);
-		}
-	`
-
-	const delayTimeSwim="0s"
-	const loopTimeSwim="5s"
-	const marginRightFish="11px"
-
-	const swingObject = css`{
-	vertical-align: middle;
-	display: inline-block;
-	margin-right: ${marginRightFish};
-	path {
-		fill: white;  
-		/*stroke-dasharray: 25px 25px;
-		stroke: #1de9b6;
-		stroke-width: 10px;*/
-	}
-	@keyframes swim {
-		from { transform: rotate(0deg); }
-		25% { transform: rotate(-20deg); }
-		50% { transform: rotate(0deg); }
-		75% { transform: rotate(20deg); }
-		to { transform: rotate(0deg); }
-	}
-	animation-name: swim;
-	animation-duration: ${loopTimeSwim};
-	animation-delay: ${delayTimeSwim};
-	animation-iteration-count: infinite;
-	animation-timing-function: ease-in-out;
-	`
-
+	
 	const unTouchable = css`
 		pointer-events:none;
+		user-drag: none; /*Webpack compile this to be compatible with Webkit*/
+		user-select:none; /*Webpack compile this to be compatible with Webkit*/
+		-webkit-touch-callout: none; /* disable the IOS popup when long-press on a link */
 	`
 
 	const touchable = css`
 		pointer-events:all;
+		user-drag: none;  /*Webpack compile this to be compatible with Webkit*/
+		user-select:none; /*Webpack compile this to be compatible with Webkit*/
+		-webkit-touch-callout: none; /* disable the IOS popup when long-press on a link */
 	`
 
-	const [ tmpText , setTmpText ] = useState("")
-
-	let _textModal = ""
-
-	//TypeWriter
-
-	const triggerTypeWriter = async ({text}) => {
-		const sleepNormal = 80
-		const sleepRat = 30
-		for (let i=0; i<text.length ;i++) {
-			if (i < text.length) {
-				_textModal = text.substring(0, i)
-				if(currStage < MAX_STAGE_COUNT-1 ) { await sleep(sleepNormal) }
-				else if (currStage == MAX_STAGE_COUNT-1 ) { await sleep(sleepRat) }
-			}
-		}
-	}
-
-	/*
-	window.document.addEventListener('DOMContentLoaded',(e) => {
-		const dataText = "HAPPY NEW YEAR 20"
-		let carot = "_"
-		let gap = -2
-		const typeWriter = (text, i) => {
-		  if (i < text.length) {
-		  	if (i == text.length-1) {carot=""; gap=-1}
-		  	window.document.querySelector("#newyear-text").innerHTML = text.substring(0, i+1)+carot+'X'.repeat(text.length-i+gap)
-			setTimeout(() => { typeWriter(text, i+1) }, 50);
-		  }
-		}
-		setTimeout(() => { typeWriter(dataText,0) }, 1000);		
-	})
-	*/
-
+	const parallaxRootDesign = css`
+		position: fixed;
+		zIndex:5;
+		height:${screenSize.height+"px"};
+	`
 	// Modal
 	// ------------------------------
 
@@ -1437,11 +1347,11 @@ const App = () => {
 
 				<script
 					type="module"
-					src="https://unpkg.com/@google/model-viewer@1.2/dist/model-viewer.min.js"
+					src="https://unpkg.com/@google/model-viewer@latest/dist/model-viewer.min.js"
 				/>
 				<script
 					noModule
-					src="https://unpkg.com/@google/model-viewer@1.2/dist/model-viewer-legacy.js"
+					src="https://unpkg.com/@google/model-viewer@latest/dist/model-viewer-legacy.js"
 				/>			
 				<meta name="theme-color" content={themeColor} />	 
 			
@@ -1461,22 +1371,24 @@ const App = () => {
 			>
 			<div style={{
 					// [FIXME][MEMO][HEURISTIC] backdrop-filter cannot invoked by style in react component... but if you use className of emotion at first, backdrop-filter's property in style activated... ( so all backdrop-filter is written in emotion and never written in style is preffered, this is at unknown reason )
-					position:'absolute',
+					position:'absolute', 
 					height:screenSize.height,
 					width:screenSize.width,
 					zIndex:100+1,
 					pointerEvents:"none",
 					
-				}} className={backdropFilterHell1}>
+				}} className={backdropFilterHellGeneral}>
 			</div>
 			</a.div>
 
 
 
-
+			{/* [ IMPORTANT SETTING - THIS PAGE's  ROOT ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */}
+			{/* [FIXME] This should renamed as NavHomeRootDesign */}
 			{/* DISPLAY SURFACE DESIGN */}
 			<div style={{
-					position:'absolute',
+					//position:'absolute',
+					position:'fixed',
 					height:screenSize.height,
 					width:screenSize.width,
 					zIndex:100+100,
@@ -1486,6 +1398,11 @@ const App = () => {
 					content: "",
 					border:10+"px solid",
 					borderColor:"rgba(0,0,0,0.3)",
+
+					userDrag: "none", /*Webpack compile this to be compatible with Webkit*/
+					userSelect:"none", /*Webpack compile this to be compatible with Webkit*/
+					webkitTouchCallout: "none" /* disable the IOS popup when long-press on a link */
+			
 					//outlineStyle:"solid",
 					//outlineColor:"rgba(0,0,0,1)",
 					//outlineWidth:"20px",
@@ -1531,7 +1448,7 @@ const App = () => {
 
 
 
-			<div className={backgroundParallax}>
+			<div className={frameRootDesign}>
 
 
 				{/* Circular rotate object background Actor */}
@@ -1692,7 +1609,7 @@ const App = () => {
 					textAlign: "center",
 					color:"rgb(0, 0, 0)",
 					zIndex: 6,//((window.scrollY>100) ? 5+1 : 5 ),
-				}}> Санкт
+				}}> 📦  AR
 			</button>
 			}
 			
@@ -1703,22 +1620,39 @@ const App = () => {
 			:
 
 			<Parallax 
-				ref={ref => (parallax = ref)} 
-				pages={6.35} 
-				style={{zIndex:"5"}}
-				config={{ duration: 0 }}
+				//ref={ref => (parallax = ref)} 
+				pages={8} /* pages : PAGE AMOUNT SETTINGS */
+				className={parallaxRootDesign} /* config: This config, retrict the slippy move to zero Then Cut Spring Physics for Perdormance */
+				config={{ duration: 0 }} 
 			>
-
-
+			
 				<ParallaxLayer offset={1} speed={0} className={unTouchable} style={{ backgroundColor: '#0aceff',zIndex:"0" }} />
 				<ParallaxLayer offset={2} speed={0} className={unTouchable} style={{ backgroundColor: '#448ef6',zIndex:"0" }} />
 				<ParallaxLayer offset={3} speed={0} className={unTouchable} style={{ backgroundColor: '#65daf7',zIndex:"0" }} />
 				<ParallaxLayer offset={4} speed={0} className={unTouchable} style={{ backgroundColor: '#81e1af',zIndex:"0" }} />
-				<ParallaxLayer offset={4.8} speed={0} className={unTouchable} style={{ backgroundColor: '#59606d',zIndex:"0" }} />
-				<ParallaxLayer offset={5.8} speed={0} className={unTouchable} style={{ backgroundColor: '#59606d',zIndex:"0" }} />
-				{/* <ParallaxLayer offset={2} speed={-0.3} style={{ backgroundSize: '80%', backgroundPosition: 'center', backgroundImage: url('clients', true)}} /> */}
+				<ParallaxLayer offset={5} speed={0} className={unTouchable} style={{ backgroundColor: '#012B67',zIndex:"0" }} />
+				<ParallaxLayer offset={6} speed={0} className={unTouchable} style={{ backgroundColor: '#000000',zIndex:"0" }} />
+				<ParallaxLayer offset={7} speed={0} className={unTouchable} style={{ 
+					backgroundColor: '#012B67',
+					zIndex:"0",
+					/*MAKE STOP OVER SCROLLING MINIMAM BY HERE...UGLY CODE[FIXME][HEURISTIC]*/
+					userDrag: "none", /*Webpack compile this to be compatible with Webkit*/
+					userSelect:"none", /*Webpack compile this to be compatible with Webkit*/
+					webkitTouchCallout: "none", /* disable the IOS popup when long-press on a link */
+				}}/>
+				<ParallaxLayer offset={7} speed={-3.0} className={unTouchable} style={{ 
+					
+					color:"white",
+					fontSize:"2vh",fontFamily:"Noto Sans JP",
+					textAlign:"center",
 
+					margin:"auto",
+					display:"flex",
+					justifyContent:"center",
+					alignItems:"center",
 
+			 	}}>Created by StrayWolf 2021</ParallaxLayer>
+				
 				{/* White Sparcle Splash */}
 				<ParallaxLayer offset={0} speed={0} factor={3} className={unTouchable} style={{ 
 					backgroundImage: url('stars', true), backgroundSize: 'cover', zIndex:"5" }} 
@@ -1742,9 +1676,14 @@ const App = () => {
 								{/*///[TEMPORARY]///<div id="newyear-text" style={{display:"inline"}}>HAPPY NEW YEAR <br/>20</div>*/}
 								{/*///[TEMPORARY]///<div className={crossText}>21</div>*/}
 							</h1>
-							<WhiteSpace lg/>
-							<WhiteSpace lg/>
-							<WhiteSpace lg/>
+							<WhiteSpace lg/><WhiteSpace lg/><WhiteSpace lg/>
+							<WhiteSpace lg/><WhiteSpace lg/><WhiteSpace lg/>
+							<WhiteSpace lg/><WhiteSpace lg/><WhiteSpace lg/>
+							<WhiteSpace lg/><WhiteSpace lg/><WhiteSpace lg/>
+							<WhiteSpace lg/><WhiteSpace lg/><WhiteSpace lg/>
+							<WhiteSpace lg/><WhiteSpace lg/><WhiteSpace lg/>
+							<WhiteSpace lg/><WhiteSpace lg/><WhiteSpace lg/>
+							<WhiteSpace lg/><WhiteSpace lg/><WhiteSpace lg/>
 							<a.div
 							style={{
 							opacity: fadeMusicButtonX
