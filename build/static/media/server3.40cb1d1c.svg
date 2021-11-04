@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 139 134" style="enable-background:new 0 0 139 134;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#BCBCBC;}
+	.st1{fill-rule:evenodd;clip-rule:evenodd;fill:#D8D8D8;}
+	.st2{fill-rule:evenodd;clip-rule:evenodd;fill:#BDBDBD;}
+	.st3{fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;}
+	.st4{fill-rule:evenodd;clip-rule:evenodd;fill:#5670BC;}
+</style>
+<desc>Created with Sketch.</desc>
+<g id="Group" transform="translate(0.000000, 8.000000)">
+	<g id="lower" transform="translate(0.000000, 75.000000)">
+		<path id="Rectangle-2-Copy-2" class="st0" d="M138.4,42c0,4.4-4.2,8-9.3,8H9.3C4.2,50,0,46.4,0,42V7h138.4"/>
+		<path id="Rectangle-2-Copy" class="st1" d="M138.4,38c0,4.4-4.2,8-9.3,8H9.3C4.2,46,0,42.4,0,38V3h138.4"/>
+		<rect id="Rectangle-3-Copy" y="-8" class="st0" width="138.4" height="5"/>
+		<path id="Rectangle-4-Copy-2" class="st2" d="M95.5,24h23c2.5,0,4.5,2,4.5,4.5l0,0c0,2.5-2,4.5-4.5,4.5h-23C93,33,91,31,91,28.5
+			l0,0C91,26,93,24,95.5,24z"/>
+		<g id="dots-copy-2" transform="translate(13.000000, 32.000000)">
+			<circle id="Oval-Copy-2" class="st3" cx="28" cy="-4" r="4"/>
+			<circle id="green" class="st4" cx="4" cy="-4" r="4"/>
+			<circle id="green_1_" class="st4" cx="16" cy="-4" r="4"/>
+		</g>
+	</g>
+	<g id="middle" transform="translate(0.000000, 43.000000)">
+		<rect id="Rectangle" y="-8" class="st1" width="138.4" height="43"/>
+		<rect id="Rectangle-3-Copy_1_" y="30" class="st0" width="138.4" height="5"/>
+		<path id="Rectangle-4-Copy" class="st2" d="M95.5,9h23c2.5,0,4.5,2,4.5,4.5l0,0c0,2.5-2,4.5-4.5,4.5h-23C93,18,91,16,91,13.5l0,0
+			C91,11,93,9,95.5,9z"/>
+		<g id="dots-copy" transform="translate(13.000000, 17.000000)">
+			<circle id="Oval" class="st3" cx="4" cy="-4" r="4"/>
+			<circle id="Oval-Copy-2_1_" class="st3" cx="28" cy="-4" r="4"/>
+			<circle id="green_2_" class="st4" cx="16" cy="-4" r="4"/>
+		</g>
+	</g>
+	<g id="upper">
+		<path id="Rectangle-2" class="st1" d="M0,0c0-4.4,3.6-8,8-8h122.4c4.4,0,8,3.6,8,8v35H0V0z"/>
+		<rect id="Rectangle-3" y="30" class="st0" width="138.4" height="5"/>
+		<path id="Rectangle-4" class="st2" d="M95.5,9h23c2.5,0,4.5,2,4.5,4.5l0,0c0,2.5-2,4.5-4.5,4.5h-23C93,18,91,16,91,13.5l0,0
+			C91,11,93,9,95.5,9z"/>
+		<g id="dots" transform="translate(13.000000, 18.000000)">
+			<circle id="white" class="st4" cx="16" cy="-4" r="4"/>
+			<circle id="white_1_" class="st4" cx="28" cy="-4" r="4"/>
+			<circle id="green_3_" class="st4" cx="4" cy="-4" r="4"/>
+		</g>
+	</g>
+</g>
+</svg>
