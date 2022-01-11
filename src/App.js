@@ -5,7 +5,6 @@ import { css,keyframes } from 'emotion'
 
 
 import { Typewriter } from 'react-typewriting-effect'
-import './typewriter.css'
 
 //Addons
 import * as R from 'ramda'
@@ -76,9 +75,9 @@ import TrainTown from "./TrainstationExampleAnimated.gif"
 
 //GLTF, GLB, usdz
 import DuckGLB from './assets/models/glb/Duck.glb'
-import DuckUSDZ from './assets/models/usdz/Duck.usdz'
+import DuckUSDZ from './assets/models/usdz/usdz_duck___1635975548914.usdz'
 import FoxGLB from './assets/models/glb/Fox.glb'
-import FoxUSDZ from './assets/models/usdz/Fox.usdz'
+import FoxUSDZ from './assets/models/usdz/usdz_fox___1637122121430_2_copy.usdz'
 import ToycarGLB from './assets/models/glb/_Toycar.glb'
 import ToycarUSDZ from './assets/models/usdz/Toycar.usdz'
 import RatcubeGLB from './assets/models/glb/Ratcube.glb'
@@ -136,7 +135,7 @@ import SFXGuard from "./assets/sounds/spell.mp3"
 import SFXCarCrush from "./assets/BGMs/CarCrush_mixdown.mp3"
 
 // Constants
-const PLAYABLE_MAX_WIDTH = 800-100
+const PLAYABLE_MAX_WIDTH = 490 // determined by the dot background (GIF) assets
 const FIRST_BATTLE_HP = 100//100
 const FIRST_STAGE = 0 //2 to car
 
@@ -685,7 +684,8 @@ const App = () => {
 
 			return () => window.removeEventListener("resize", handleResize);
 			
-	},[window.innerHeight])
+	},[window.innerHeight])　
+	//[FIXME] I wanna make this added 2 detector not only Height... like  window.innerHeight || window.innerWidth
 
 	useEffect(
 	()=>{
@@ -695,7 +695,7 @@ const App = () => {
 		setScrollYPos(window.scrollY)
 
 		return ()=> 	window.removeEventListener("scroll", handleScroll)
-	},[scrollYPos])
+	},[window.scrollY])
 
 
 	//BGM Switcher from Toggle Button
@@ -728,6 +728,13 @@ const App = () => {
 	,[playbackRate])
 
 	useEffect(
+		()=>{
+			if (window.innerWidth > PLAYABLE_MAX_WIDTH) { setIsOverWidth(true) } else { setIsOverWidth(false) }
+			console.log("isOverWidth:"+isOverWidth)
+		}
+	,[window.innerWidth])
+
+	useEffect(
 		() => {
 		const _isMobile = () => {
 			let check = false;
@@ -746,8 +753,6 @@ const App = () => {
 		}
 
 		setIsMobileOrTablet(_isMobileOrTablet);
-
-		if (window.innerWidth > PLAYABLE_MAX_WIDTH) setIsOverWidth(true);
 
 		if (/iPhone|iPod|iPad/i.test(window.navigator.userAgent)) { setDeviceName("iPhone") } else { setDeviceName("アンドロイド") }
 
@@ -797,7 +802,7 @@ const App = () => {
 			let ipAddress = null
 			let osVersion = null
 
-			ipAddress = _data?.match(/ip=(.*)/)[1] // [0] is not group, entire matching string. so then [1]=(XXX) is capture group
+			ipAddress = _data?.match(/ip=(.*)/)?.[1] // [0] is not group, entire matching string. so then [1]=(XXX) is capture group
 			osVersion = _data?.match(/iPhone OS ([1-9_]*)/)?.[1]
 			osVersion = String(osVersion).replaceAll("_",".")
 
@@ -1056,7 +1061,7 @@ const App = () => {
 		
 		overflow-y: auto;
 		-webkit-overflow-scrolling: touch;
-		pointer-events:none;
+		//pointer-events:none; //[FIXME] 20211129 patched: This cancels all events below-nested elements then Occured Bug that cancel model-viewer's camera-control user interaction. However, this comment out causes latent bug that would, in Parallax(React-Spring), user can go out of the last parallax page beyond boundary We expect.
 		user-drag: none; /*Webpack compile this to be compatible with Webkit*/
 		user-select:none; /*Webpack compile this to be compatible with Webkit*/
 		-webkit-touch-callout: none; /* disable the IOS popup when long-press on a link */
@@ -1077,12 +1082,7 @@ const App = () => {
 
 	const backgroundModelBoard = css`
 
-		user-drag: none; /*Webpack compile this to be compatible with Webkit*/
-		user-select:none; /*Webpack compile this to be compatible with Webkit*/
-		-webkit-touch-callout: none; /* disable the IOS popup when long-press on a link */
-
-		model-viewer {
-		
+		model-viewer {		
 			margin: auto;
 			width: 100%;
 			//height: 100%; /* 600px by default is preferred. */ 
@@ -1401,7 +1401,7 @@ const App = () => {
 
 					userDrag: "none", /*Webpack compile this to be compatible with Webkit*/
 					userSelect:"none", /*Webpack compile this to be compatible with Webkit*/
-					webkitTouchCallout: "none" /* disable the IOS popup when long-press on a link */
+					WebkitTouchCallout: "none" /* disable the IOS popup when long-press on a link */
 			
 					//outlineStyle:"solid",
 					//outlineColor:"rgba(0,0,0,1)",
@@ -1556,7 +1556,7 @@ const App = () => {
 								}}>🎍
 							</button>
 						}
-					</model-viewer >
+						</model-viewer>
 				</div>
 
 			</div>
@@ -1565,10 +1565,10 @@ const App = () => {
 
 			{ isOverWidth ||
 			<NoticeBar 	mode="closable" 
+						icon={null}
 						marqueeProps= {{ loop: true, leading: 1000, trailing: 5000, style: { padding: '0 7.5px', fontFamily:"PixelMPlus" }} }
-						style={{marginTop: 10+16+3+"px", marginLeft:10-5+15+5+"px", marginRight:40+15+"px"}}> ─────── 春を迎えるはずだった─ ──世界は歪んで ───── ── ── ─ ─────誰か── ── ─ここに来て─────平和を取り戻して── ─ ─ ─ ─── ─ ─ ─ ── ── </NoticeBar>
+						style={{marginTop: 10+16+3+"px", marginLeft:10-5+15+5+15+"px", marginRight:40+15+"px"}}> ─────── ─ ──この世界は壊れてしまった ───── ── ── ─ ─────誰か── ── ─ここに来て─────平和を取り戻して── ─ ─ ─ ─── ─ ─ ─ ── ── </NoticeBar>
 			}
-
 			{/* BGM SWITCH INDICATOR Actor */}
 			<button
 				id="BGMSwitcher"
@@ -1615,7 +1615,7 @@ const App = () => {
 			
 			{ isOverWidth ? 
 			
-			<Card style={{margin:"auto", padding:"20px", top:`${screenSize.height/(1.0+1.0-0.7)}px`, blur:"20px", background:"rgba(255,255,255,0.3)" ,display:"flex", justifyContent:"center", fontFamily:"PixelMPlus", textAlign:"center"}} className={backdropFilter1}><strong>🍊 ゆうびん 🎍🏠🎍 お知らせ 🍊</strong><WhiteSpace sm/>スマホの専用機能を使っているため、ゲームモードを起動できません。<WhiteSpace lg/>スマホからお楽しみくだされ　<WhiteSpace lg/><strong> ( ただしアヒルとはふれあえます )</strong></Card>
+			<Card style={{margin:"auto", padding:"20px", top:`${screenSize.height/(1.0+1.0-0.7)}px`, blur:"20px", background:"rgba(255,255,255,0.3)" ,display:"flex", justifyContent:"center", fontFamily:"PixelMPlus", textAlign:"center"}} className={backdropFilter1}><strong>🍊 SCRIBBLE 🎍🏠🎍 お知らせ 🍊</strong><WhiteSpace sm/>スマホの専用機能を使っているため、ゲームモードを起動できません。<WhiteSpace lg/>スマホからお楽しみくだされ　<WhiteSpace lg/><strong> ( ただしアヒルとはふれあえます )</strong></Card>
 
 			:
 
@@ -1638,7 +1638,7 @@ const App = () => {
 					/*MAKE STOP OVER SCROLLING MINIMAM BY HERE...UGLY CODE[FIXME][HEURISTIC]*/
 					userDrag: "none", /*Webpack compile this to be compatible with Webkit*/
 					userSelect:"none", /*Webpack compile this to be compatible with Webkit*/
-					webkitTouchCallout: "none", /* disable the IOS popup when long-press on a link */
+					WebkitTouchCallout: "none", /* disable the IOS popup when long-press on a link */
 				}}/>
 				<ParallaxLayer offset={7} speed={-3.0} className={unTouchable} style={{ 
 					
@@ -1676,14 +1676,7 @@ const App = () => {
 								{/*///[TEMPORARY]///<div id="newyear-text" style={{display:"inline"}}>HAPPY NEW YEAR <br/>20</div>*/}
 								{/*///[TEMPORARY]///<div className={crossText}>21</div>*/}
 							</h1>
-							<WhiteSpace lg/><WhiteSpace lg/><WhiteSpace lg/>
-							<WhiteSpace lg/><WhiteSpace lg/><WhiteSpace lg/>
-							<WhiteSpace lg/><WhiteSpace lg/><WhiteSpace lg/>
-							<WhiteSpace lg/><WhiteSpace lg/><WhiteSpace lg/>
-							<WhiteSpace lg/><WhiteSpace lg/><WhiteSpace lg/>
-							<WhiteSpace lg/><WhiteSpace lg/><WhiteSpace lg/>
-							<WhiteSpace lg/><WhiteSpace lg/><WhiteSpace lg/>
-							<WhiteSpace lg/><WhiteSpace lg/><WhiteSpace lg/>
+							{ [...Array( /*WhiteSpaceRepeatCount*/ 21 )].map( ( _ , i )=>( <WhiteSpace lg/> ) ) }
 							<a.div
 							style={{
 							opacity: fadeMusicButtonX
@@ -1865,7 +1858,7 @@ const App = () => {
 						pointerEvents:"all"
 						}}>
 						<DinoDI />
-						<div style={{background:"rgba(0,0,0,1)", color:"white", fontFamily:"PixelMPlus"}}>伊勢・オカゲタウン</div>
+						<div style={{background:"rgba(0,0,0,1)", color:"white", fontFamily:"PixelMPlus"}}>ISE - KAMAKURA TOWN</div>
 					</Card>
 					<img onClick={ (e)=>{e.preventDefault; playSFXclick8()}} 
 					className={touchable}
@@ -1976,7 +1969,7 @@ const App = () => {
 						fontFamily:"Noto Sans JP", paddingBottom:"5px",
 						zIndex:"20"}}>
 						<DinoST style={{maxHeight:"50px", marginBottom:"10px"}}/>
-						<div style={{background:"rgba(0,0,0,1)", color:"white", fontFamily:"PixelMPlus" }}>鎌倉・コートクタウン</div>
+						<div style={{background:"rgba(0,0,0,1)", color:"white", fontFamily:"PixelMPlus" }}>NARA - OKAGE CITY</div>
 					</Card>
 
 					<img onClick={ (e)=>{e.preventDefault; playSFXclick8()}} className={touchable}  
