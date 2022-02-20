@@ -1,7 +1,7 @@
 //Core
 import React from 'react'
 import { useState, useEffect, useRef } from 'react'
-import { css,keyframes } from 'emotion'
+import { css,keyframes } from '@emotion/css'
 
 
 import { Typewriter } from 'react-typewriting-effect'
@@ -44,11 +44,11 @@ import {
 import { ReactComponent as SymbolSoundOff } from "./assets/svgs/circumference.svg"
 import { ReactComponent as SymbolSoundOn } from "./assets/svgs/circumference_filled.svg"
 
-import { ReactComponent as DinoDI } from "./diplodocus.svg"
-import { ReactComponent as DinoST } from "./stegosaurus_2.svg"
+import { ReactComponent as DinoDI } from "./assets/actors/diplodocus.svg"
+import { ReactComponent as DinoST } from "./assets/actors/stegosaurus_2.svg"
 
-import rat from "./Rat_62x30.png"
-import kyokoVideo from "./kyoko_2.mp4"
+import rat from "./assets/actors/Rat_62x30.png"
+import kyokoVideo from "./assets/kyoko_2.mp4"
 
 /*
 import { ReactComponent as satellite4 } from "./satellite4.svg"
@@ -58,20 +58,20 @@ import { ReactComponent as clientMain } from "./clients-main.svg"
 import { ReactComponent as serverMain } from "./server.svg"
 */
 
-import satellite4 from "./satellite4.svg"
-//import server from "./server.svg"
-import server1 from "./server1.svg"
-import server2 from "./server2.svg"
-import server3 from "./server3.svg"
-import cloud from "./cloud.svg"
-import clientMain from "./clients-main.svg"
-import bash from "./bash.svg"
+import satellite4 from "./assets/actors/satellite4.svg"
+//import server from "./assets/actors/server.svg"
+import server1 from "./assets/actors/server1.svg"
+import server2 from "./assets/actors/server2.svg"
+import server3 from "./assets/actors/server3.svg"
+import cloud from "./assets/actors/cloud.svg"
+import clientMain from "./assets/actors/clients-main.svg"
+import bash from "./assets/actors/bash.svg"
 
 //TASUKETEGIFs
-import OldTown from "./JapaneseCityExample.gif"
-import KanagawaTown from "./KanagawaExample.gif"
-import GameTown from "./Example2.gif"
-import TrainTown from "./TrainstationExampleAnimated.gif"
+import OldTown from "./assets/maps/JapaneseCityExample.gif"
+import KanagawaTown from "./assets/maps/KanagawaExample.gif"
+import GameTown from "./assets/maps/Example2.gif"
+import TrainTown from "./assets/maps/TrainstationExampleAnimated.gif"
 
 //GLTF, GLB, usdz
 import DuckGLB from './assets/models/glb/Duck.glb'
@@ -84,7 +84,7 @@ import RatcubeGLB from './assets/models/glb/Ratcube.glb'
 import RatcubeUSDZ from './assets/models/usdz/Ratcube.usdz'
 
 //Parallax
-import { Parallax, ParallaxLayer } from 'react-spring/renderprops-addons'
+import { Parallax, ParallaxLayer } from '@react-spring/parallax'
 
 //Sounds
 import BGMending from './assets/BGMs/BUILT_TO_LAST_Official_2_short_80.mp3';
@@ -1362,11 +1362,11 @@ const App = () => {
 			//// [FIXME][MEMO][HEURISTIC] backdrop-filter cannot invoked by style in react component... but if you use className of emotion at first, backdrop-filter's property in style activated... ( so all backdrop-filter is written in emotion and never written in style is preffered, this is at unknown reason )
 			//// [FIXME][MEMO][HEURISTIC] backdrop-filter cannot invoked by style so this backdropFilter syntax cannot be involed and coonected with react-spring target instance
 			// backdropFilter: applyHellFilter
-			// 	.interpolate({
+			// 	.to({
 			// 	range: [0, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 1],
 			// 	output: [1, 0.97, 0.9, 1.1, 0.9, 1.1, 1.03, 1]
 			// 	})
-			// 	.interpolate((_x) => `invert(${_x})`)
+			// 	.to((_x) => `invert(${_x})`)
 			}}
 			>
 			<div style={{
@@ -1633,15 +1633,15 @@ const App = () => {
 				<ParallaxLayer offset={5} speed={0} className={unTouchable} style={{ backgroundColor: '#012B67',zIndex:"0" }} />
 				<ParallaxLayer offset={6} speed={0} className={unTouchable} style={{ backgroundColor: '#000000',zIndex:"0" }} />
 				<ParallaxLayer offset={7} speed={0} className={unTouchable} style={{ 
-					backgroundColor: '#012B67',
-					zIndex:"0",
-					/*MAKE STOP OVER SCROLLING MINIMAM BY HERE...UGLY CODE[FIXME][HEURISTIC]*/
-					userDrag: "none", /*Webpack compile this to be compatible with Webkit*/
-					userSelect:"none", /*Webpack compile this to be compatible with Webkit*/
-					WebkitTouchCallout: "none", /* disable the IOS popup when long-press on a link */
-				}}/>
-				<ParallaxLayer offset={7} speed={-3.0} className={unTouchable} style={{ 
-					
+				 	backgroundColor: '#012B67',
+				 	zIndex:"0",
+				 	/*MAKE STOP OVER SCROLLING MINIMAM BY HERE...UGLY CODE[FIXME][HEURISTIC]*/
+				 	userDrag: "none", /*Webpack compile this to be compatible with Webkit*/
+				 	userSelect:"none", /*Webpack compile this to be compatible with Webkit*/
+				 	WebkitTouchCallout: "none", /* disable the IOS popup when long-press on a link */
+				 }}/>
+				<ParallaxLayer offset={7} speed={0.5} factor={0}  className={unTouchable} style={{ 
+					zIndex: "100",
 					color:"white",
 					fontSize:"2vh",fontFamily:"Noto Sans JP",
 					textAlign:"center",
@@ -1651,14 +1651,14 @@ const App = () => {
 					justifyContent:"center",
 					alignItems:"center",
 
-			 	}}>Created by StrayWolf 2021</ParallaxLayer>
+			 	}}>Created by StrayDrop 2021</ParallaxLayer>
 				
 				{/* White Sparcle Splash */}
 				<ParallaxLayer offset={0} speed={0} factor={3} className={unTouchable} style={{ 
 					backgroundImage: url('stars', true), backgroundSize: 'cover', zIndex:"5" }} 
 				/>
 
-				<ParallaxLayer offset={0.3} speed={0} style={{zIndex:"0" }}>
+				<ParallaxLayer offset={0.3} speed={0} style={{ zIndex:"0" }}>
 					{/* *** Articles   */}
 					<div className={ArticleRootDesign}>
 					
@@ -1680,13 +1680,13 @@ const App = () => {
 							<a.div
 							style={{
 							opacity: fadeMusicButtonX
-								.interpolate({ range: [0, 1], output: [0.05, 1] }),
+								.to({ range: [0, 1], output: [0.05, 1] }),
 							transform: fadeMusicButtonX
-								.interpolate({
+								.to({
 								range: [0, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 1],
 								output: [1, 0.97, 0.9, 1.1, 0.9, 1.1, 1.03, 1]
 								})
-								.interpolate((_x) => `scale(${_x})`)
+								.to((_x) => `scale(${_x})`)
 							}}>
 							<Button
 								onClick={ ()=>{
