@@ -5,7 +5,7 @@ import React from 'react'
 
 //serviceWorker
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-//import reportWebVitals from './reportWebVitals';
+import reportWebVitals from './reportWebVitals';
 
 // Components
 import App from './App'
