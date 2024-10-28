@@ -1,3 +1,11 @@
+
+
+https://github.com/user-attachments/assets/ab8eb350-d07a-4c8c-a0da-330e595dfa94
+
+
+https://github.com/user-attachments/assets/2de7ccab-7f23-44c8-925d-50410e694bfc
+
+
 # AR Animal Interaction Website 🐾
 
 Welcome to the **AR Animal Interaction Mobile Website**! This platform provides an engaging experience where you can interact with various animals using Augmented Reality (AR) and enjoy a variety of audio interactions. Learn about the features below to explore the fun! 🚀
