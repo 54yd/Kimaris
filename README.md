@@ -1,6 +1,13 @@
 # AR Animal Interaction Website 🐾
 
-Welcome to the **AR Animal Interaction Website**! This platform provides an engaging experience where you can interact with various animals using Augmented Reality (AR) and enjoy a variety of audio interactions. Learn about the features below to explore the fun! 🚀
+Welcome to the **AR Animal Interaction Mobile Website**! This platform provides an engaging experience where you can interact with various animals using Augmented Reality (AR) and enjoy a variety of audio interactions. Learn about the features below to explore the fun! 🚀
+
+## 🚀 CAUTION
+This is a mobile(iOS/Android) specified Project, You can't play on Windows/Mac. if you access via these devices, so many of limitations are activated. (including layout) WE HIGHLY RECOMMEND PLAY BY SMARTPHONE, THANKS!
+
+AUTOMATIC DEPLOY TO
+
+https://kimaris.vercel.app
 
 ## Features ✨
 
