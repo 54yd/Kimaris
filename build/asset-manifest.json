@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/static/css/main.1d55e2c1.css",
-    "main.js": "/static/js/main.d8949324.js",
-    "static/js/510.10672840.chunk.js": "/static/js/510.10672840.chunk.js",
+    "main.css": "/static/css/main.0a038540.css",
+    "main.js": "/static/js/main.c101cd37.js",
+    "static/js/796.06477425.chunk.js": "/static/js/796.06477425.chunk.js",
     "static/media/kyoko_2.mp4": "/static/media/kyoko_2.8a16fed712dcf7f18d06.mp4",
     "static/media/_Toycar.glb": "/static/media/_Toycar.2fcbbb3e60bb1de8fdfa.glb",
     "static/media/Toycar.usdz": "/static/media/Toycar.2d8990b73379e991cab1.usdz",
@@ -18,13 +18,13 @@
     "static/media/Fox.glb": "/static/media/Fox.8693e7d757701982b9ee.glb",
     "static/media/EMP Explosion_02.mp3": "/static/media/EMP Explosion_02.5e464db43fc7f221dd50.mp3",
     "static/media/car 2.mp3": "/static/media/car 2.b2b1b4e7d66d04b57931.mp3",
-    "service-worker.js": "/service-worker.js",
     "static/media/car 4.mp3": "/static/media/car 4.6058af85ae292cbbfabc.mp3",
     "static/media/level-up.mp3": "/static/media/level-up.e187fd7a4ed73da3e374.mp3",
     "static/media/victory.mp3": "/static/media/victory.fd5742a4672fef9ad318.mp3",
     "static/media/sci-fi_driod_robot_emote_06.mp3": "/static/media/sci-fi_driod_robot_emote_06.65def2fe6b8f4f025f05.mp3",
     "static/media/car 1.mp3": "/static/media/car 1.961f70fc278cee1f0295.mp3",
     "static/media/car 5.mp3": "/static/media/car 5.930ee7a1103fa8ac1fbc.mp3",
+    "service-worker.js": "/service-worker.js",
     "static/media/sci-fi_driod_robot_emote_beeps_05.mp3": "/static/media/sci-fi_driod_robot_emote_beeps_05.88c77eff3a9e5f148d52.mp3",
     "static/media/Duck.glb": "/static/media/Duck.1e5f27e343971bca0890.glb",
     "static/media/YellAndAttack.mp3": "/static/media/YellAndAttack.54fd77d2ed8e6a4f0517.mp3",
@@ -64,10 +64,13 @@
     "static/media/circumference.svg": "/static/media/circumference.7cd804c5804a237839886946b7457ee5.svg",
     "static/media/circumference_filled.svg": "/static/media/circumference_filled.5bfc9d8c1bb37cee4013be9d196de13f.svg",
     "static/media/cloud.svg": "/static/media/cloud.b523f6268750c0c5a9465e219f376188.svg",
-    "index.html": "/index.html"
+    "index.html": "/index.html",
+    "main.0a038540.css.map": "/static/css/main.0a038540.css.map",
+    "main.c101cd37.js.map": "/static/js/main.c101cd37.js.map",
+    "796.06477425.chunk.js.map": "/static/js/796.06477425.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.1d55e2c1.css",
-    "static/js/main.d8949324.js"
+    "static/css/main.0a038540.css",
+    "static/js/main.c101cd37.js"
   ]
 }
