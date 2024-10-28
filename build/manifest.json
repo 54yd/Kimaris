@@ -1,7 +1,8 @@
 {
   "name": "DropOrders",
   "short_name": "DropOrders",
-  "start_url": "/public/index.html",
+  "start_url": "/index.html",
+  "scope": ".",
   "background_color": "blue",
   "description": "everything become reality, the future is yours.",
   "display": "standalone",

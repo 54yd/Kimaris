@@ -1,4 +1,0 @@
-"plugins": [
-  ["import", { "libraryName": "antd", "style": "css" , "libraryDirectory": "lib"}, "antd"],
-  ["import", { "libraryName": "antd-mobile", "style": "css", "libraryDirectory": "lib"}, "antd-mobile"]
-]

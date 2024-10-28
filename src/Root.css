@@ -10,7 +10,7 @@
 
 @font-face {
   font-family: 'PixelMPlus';
-  src: local('PixelMPlus'), url(./PixelMplus12-Regular.ttf) format("truetype");
+  src: local('PixelMPlus'), url(./assets/fonts/PixelMplus12-Regular.ttf) format("truetype");
 }
 
 * {
