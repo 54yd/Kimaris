@@ -1536,7 +1536,7 @@ const App = () => {
 						{...stageParams[currStage]}
 
 						>
-						{(isMobileOrTablet) &&
+						{(isMobileOrTablet||true) &&
 							<button slot="ar-button" 
 								id="ar-button-1"
 								style={{
@@ -1567,7 +1567,7 @@ const App = () => {
 			<NoticeBar 	mode="closable" 
 						icon={null}
 						marqueeProps= {{ loop: true, leading: 1000, trailing: 5000, style: { padding: '0 7.5px', fontFamily:"PixelMPlus" }} }
-						style={{marginTop: 10+16+3+"px", marginLeft:10-5+15+5+15+"px", marginRight:40+15+"px"}}> ─────── ─ ──この世界は壊れてしまった ───── ── ── ─ ─────誰か── ── ─ここに来て─────平和を取り戻して── ─ ─ ─ ─── ─ ─ ─ ── ── </NoticeBar>
+						style={{marginTop: 10+16+3+"px", marginLeft:10-5+15+5+15+"px", marginRight:40+15+"px"}}> TOUCH ANIMALS REPEATEDLY !!! </NoticeBar>
 			}
 			{/* BGM SWITCH INDICATOR Actor */}
 			<button
