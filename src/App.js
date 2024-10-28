@@ -1699,8 +1699,7 @@ const App = () => {
 						marginLeft: 10 - 5 + 15 + 5 + 15 + 'px',
 						marginRight: 40 + 15 + 'px',
 					}}>
-					{' '}
-					TOUCH ANIMALS REPEATEDLY !!!──{' '}
+					　 ──────────────　TOUCH ANIMALS REPEATEDLY !!!　────────────────　{' '}
 				</NoticeBar>
 			)}
 			{/* BGM SWITCH INDICATOR Actor */}
