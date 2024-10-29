@@ -40,8 +40,8 @@ https://kimaris.vercel.app
 
 ## Key Technologies Used 🚀
 
-- **ARKit and React Native**: These technologies power the augmented reality experience and allow for smooth integration with mobile devices. 📱
-- **React Hooks**: For state management and seamless interaction within the app. ⚛️
+- **ARKit and ThreeJS, React**: These technologies power the AR experience and allow for smooth integration with mobile devices. 📱
+- **Service Worker**: For store the HTML data and can work on offline. ⚛️
 - **Web Audio API**: For real-time pitch and speed audio manipulation, delivering customized audio effects.
 
 ## How to Use 🐾
