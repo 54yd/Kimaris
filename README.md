@@ -20,7 +20,7 @@ https://kimaris.vercel.app
 ## Features ✨
 
 1. **Place and Interact with 3D Animals in AR**
-   - Install is available. you can install this web App into your home screen. Then you can use them as music player when offline. (This App uses PWA, and Workbox for offline no signal situation to work!)
+   - Install is available. you can install this web App into your home screen. Then you can use them as music player when offline. (This App uses PWA. also uses Workbox to function without Wifi/5G/4G)
    - Offline-Compatible. The latest technology of ServiceWorker(WorkBox) can this App run offline (partially)
    - Place virtual 3D animals onto real-world surfaces using your mobile device. 🐘🐅
    - Animals are  interactive (only default page, not AR mode): touch their tummies repeatedly, and you can play game with them, by dialogue and sounds! 😄
