@@ -20,20 +20,21 @@ https://kimaris.vercel.app
 ## Features ✨
 
 1. **Place and Interact with 3D Animals in AR**
+   - Install is available. you can install this web App into your home screen. Then you can use them as music player when offline. (This App uses PWA, and Workbox for offline no signal situation to work!)
    - Offline-Compatible. The latest technology of ServiceWorker(WorkBox) can this App run offline (partially)
    - Place virtual 3D animals onto real-world surfaces using your mobile device. 🐘🐅
    - Animals are  interactive (only default page, not AR mode): touch their tummies repeatedly, and you can play game with them, by dialogue and sounds! 😄
 
-2. **Animal HP and Battle Game Mode**
+3. **Animal HP and Battle Game Mode**
 
    - Each animal has its own HP (Health Points). Reduce their HP by interacting with them. 💥
    - Engage in battle game mode: YOU vs 🐯 like Pokemon.
 
-3. **Smooth Surface Detection**
+4. **Smooth Surface Detection**
 
    - The app detects land surfaces for realistic AR animal placement. Animals adjust seamlessly to your environment. 📀✨
 
-4. **Real-Time Audio Manipulation**
+5. **Real-Time Audio Manipulation**
 
    - Enjoy real-time audio effects that change dynamically with each interaction. The pitch and speed of the audio will adjust based on game stage (I made this API as implementation.)
 
@@ -55,7 +56,7 @@ https://kimaris.vercel.app
 
 3. **Interact with the Animal** 👋
 
-   - Touch the animal's tummy to see it react! Each interaction may reduce its HP, bringing a game-like element to the experience. 🟤
+   - Touch the animal's head (around neck) to see it react! Each interaction may reduce its HP, bringing a game-like element to the experience. 🟤
 
 4. **Battle Mode** ⚔️
 
