@@ -46,25 +46,24 @@ https://kimaris.vercel.app
 
 ## How to Use 🐾
 
-1. **Launch the App** 🚀
-
-   - Open the AR Animal Interaction app on your mobile device.
-
-2. **Place an Animal** 🐅
-
-   - Point your camera towards a flat surface, and once detected, place the animal of your choice by tapping on your screen.
-
-3. **Interact with the Animal** 👋
+1. **Interact with the Animal** 👋
 
    - Touch the animal's head (around neck) to see it react! Each interaction may reduce its HP, bringing a game-like element to the experience. 🟤
 
-4. **Battle Mode** ⚔️
+2. **Battle Mode** ⚔️
 
    - Enable multiple animals, interact with them, and watch them battle! This is a unique feature that sets our app apart from other AR experiences.
 
-5. **Explore Audio Reactions** 🎙️
+3. **Explore Audio Reactions** 🎙️
 
    - Touching any item triggers a variety of sounds for interaction and enjoyment.
+
+
+extra. **AR MODE** 🚀
+
+   - touch top-right AR button to dive in AR mode.
+   - Point your camera towards a flat surface, and once detected, place the animal of your choice by tapping on your screen.
+
 
 ## Why This App Stands Out 🌟
 
