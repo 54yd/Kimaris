@@ -64,7 +64,7 @@ https://kimaris.vercel.app
 
 5. **Explore Audio Reactions** 🎙️
 
-   - Play with the animals and notice the pitch and speed of the sound change based on how you interact. Every animal has its unique set of sounds that adapt in real-time.
+   - Touching any item triggers a variety of sounds for interaction and enjoyment.
 
 ## Why This App Stands Out 🌟
 
